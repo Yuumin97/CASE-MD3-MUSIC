@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class User {
-    private int id;
+    private  int id;
     private String name;
     private String username;
     private String email;
@@ -33,12 +33,10 @@ public class User {
         this.roles = roles;
     }
 
-    public User(int id, String name, String username, String email, String password) {
+    public User(int id, String name, Set<Role> roles) {
         this.id = id;
         this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        this.roles = roles;
     }
 
     public int getId() {
@@ -95,20 +93,6 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-    public RoleName getRoleName() {
-        for (Role role : roles) {
-            if (role.getName() == RoleName.USER) {
-                return RoleName.USER;
-            }
-            if (role.getName() == RoleName.PM) {
-                return RoleName.PM;
-            }
-            if (role.getName() == RoleName.ADMIN) {
-                return RoleName.ADMIN;
-            }
-        }
-        return null;
     }
 
     @Override

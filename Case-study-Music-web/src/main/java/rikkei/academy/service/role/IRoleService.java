@@ -5,4 +5,5 @@ import rikkei.academy.model.RoleName;
 
 public interface IRoleService {
     Role findByName(RoleName name);
+    Role findById(int id);
 }
