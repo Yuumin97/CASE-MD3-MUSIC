@@ -22,7 +22,7 @@ public class RoleServiceIMPL implements IRoleService {
             preparedStatement.setString(1, String.valueOf(name));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
+                int id = resultSet.getInt(1);
                 role = new Role(id, name);
             }
         } catch (SQLException e) {

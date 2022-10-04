@@ -33,6 +33,14 @@ public class User {
         this.roles = roles;
     }
 
+    public User(int id, String name, String username, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public int getId() {
         return id;
     }
@@ -87,6 +95,20 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+    public RoleName getRoleName() {
+        for (Role role : roles) {
+            if (role.getName() == RoleName.USER) {
+                return RoleName.USER;
+            }
+            if (role.getName() == RoleName.PM) {
+                return RoleName.PM;
+            }
+            if (role.getName() == RoleName.ADMIN) {
+                return RoleName.ADMIN;
+            }
+        }
+        return null;
     }
 
     @Override

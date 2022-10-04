@@ -2,10 +2,12 @@ package rikkei.academy.service.user;
 
 import rikkei.academy.config.ConnectMySQL;
 import rikkei.academy.model.Role;
+import rikkei.academy.model.RoleName;
 import rikkei.academy.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class UserServiceIMPL implements IUserService {
     private final String INSERT_ROLE_ID_USER_TO ="INSERT INTO user_role(user_id, role_id) values (?,?);";
     private final String FIND_ALL_USERNAME = "SELECT username from users;";
     private final String FIND_ALL_EMAIL = "SELECT email from users;";
+    private final String SQL_CHECK_LOGIN = "select id, name, email from `users` where username = ? and password = ?;";
     @Override
     public void save(User user) {
         try {
@@ -82,5 +85,46 @@ public class UserServiceIMPL implements IUserService {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    @Override
+    public User checkLogin(String username, String password) {
+        User user = null;
+        try (
+                PreparedStatement ps = connection.prepareStatement(SQL_CHECK_LOGIN)
+        ) {
+            connection.setAutoCommit(false);
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                String email = rs.getString(3);
+
+                user = new User(id, name, username, email, password);
+                Set<Role> roleSet = new HashSet<>();
+                String SQL_FIND_ROLE = "select r.id, rolename from role_user ru join role r on ru.id_role = r.id where id_user = ?";
+                PreparedStatement ps_role = connection.prepareStatement(SQL_FIND_ROLE);
+                ps_role.setInt(1, user.getId());
+                ResultSet rs_role = ps_role.executeQuery();
+
+                while (rs_role.next()) {
+                    int id_role = rs_role.getInt(1);
+                    String roleName = rs_role.getString(2);
+                    roleSet.add(new Role(id_role, RoleName.valueOf(roleName.toUpperCase())));
+                }
+
+                user.setRoles(roleSet);
+
+            }
+
+
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 }

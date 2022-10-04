@@ -49,6 +49,9 @@ public class UserController extends HttpServlet {
             case "register":
                 actionRegister(request, response);
                 break;
+            case "login":
+                actionLogin(request,response);
+                break;
         }
 
     }
@@ -108,15 +111,30 @@ public class UserController extends HttpServlet {
         User user = new User(name, username, email, password, roles);
         userService.save(user);
         request.setAttribute("success", "Create success");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/login/register.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/login/login.jsp");
         dispatcher.forward(request, response);
     }
     public void showFormLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/login/login.jsp");
         dispatcher.forward(request, response);
     }
-    public void actionLogin(HttpServletRequest request, HttpServletResponse response){
+    public void actionLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
+        if (username.trim().isEmpty() || password.trim().isEmpty()) {
+            request.getRequestDispatcher("/login/login.jsp").forward(request, response);
+            return;
+        }
+
+        User user = userService.checkLogin(username, password);
+
+        RoleName roleName = user.getRoleName();
+
+        request.getSession().setAttribute("role", roleName);
+        request.getSession().setAttribute("userLogin", user);
+
+        request.getRequestDispatcher("/home/index.jsp").forward(request, response);
     }
 
 }
