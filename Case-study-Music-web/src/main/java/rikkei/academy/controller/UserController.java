@@ -41,6 +41,9 @@ public class UserController extends HttpServlet {
             case "change_avatar":
                 showUpLoadAvatar(request,response);
                 break;
+            case "profile":
+                showMyProfile(request, response);
+                break;
         }
     }
 
@@ -63,6 +66,9 @@ public class UserController extends HttpServlet {
             case "change_avatar":
                 actionUpLoadAvatar(request,response);
                 break;
+            case "changePass":
+                actionChangePass(request,response);
+                break;
         }
     }
 
@@ -73,7 +79,7 @@ public class UserController extends HttpServlet {
         dispatcher.forward(request,response);
     }
     public void actionRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String role = "admin";
+        String role = "user";
         Set<String> strRole = new HashSet<>();
         Set<Role> roles = new HashSet<>();
         strRole.add(role);
@@ -174,5 +180,23 @@ public class UserController extends HttpServlet {
         request.setAttribute("avatar",avatar);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/profile/profile.jsp");
         requestDispatcher.forward(request,response);
+    }
+    public void showMyProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/profile/profile.jsp");
+        requestDispatcher.forward(request,response);
+    }
+    public void showFormChangePass(HttpServletRequest request, HttpServletResponse response){
+
+    }
+    public void actionChangePass(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String oldPass = request.getParameter("oldPass");
+        String newPass = request.getParameter("newPass");
+        String repeatPass = request.getParameter("repeatPass");
+
+        if (!newPass.equals(repeatPass)){
+            request.setAttribute("message","Repeat pass not match");
+            request.getRequestDispatcher("/form-login/change_pass.jsp").forward(request,response);
+
+        }
     }
 }

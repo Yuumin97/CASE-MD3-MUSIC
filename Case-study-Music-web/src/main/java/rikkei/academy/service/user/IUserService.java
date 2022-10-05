@@ -9,4 +9,5 @@ public interface IUserService extends IGenericService<User> {
     User findById(int id);
     User findByUsernameAndPassword(String username, String password);
     void changeAvatar(String avatar, int id);
+    void changePassword(String password, int id);
 }

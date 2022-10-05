@@ -12,12 +12,12 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<a href="mp3?action=create">Create MP3</a>
-<audio controls>
-    <source src="${requestScope["mp3"]}" type="audio/ogg">
-    <source src="${requestScope["mp3"]}" type="audio/mpeg">
-    Your browser does not support the audio element.
-</audio>
+<%--<a href="mp3?action=create">Create MP3</a>--%>
+<%--<audio controls>--%>
+<%--    <source src="${requestScope["mp3"]}" type="audio/ogg">--%>
+<%--    <source src="${requestScope["mp3"]}" type="audio/mpeg">--%>
+<%--    Your browser does not support the audio element.--%>
+<%--</audio>--%>
 <%--<nav class="navbar navbar-expand-lg navbar-light bg-light">--%>
 <%--    <div class="container-fluid">--%>
 <%--        <a class="navbar-brand" href="#">Navbar</a>--%>
