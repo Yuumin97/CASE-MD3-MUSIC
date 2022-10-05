@@ -15,12 +15,12 @@ import java.util.List;
 
 public class BandServiceIMPL implements IBandService{
     private Connection connection = ConnectMySQL.getConnection();
-    private static final String LIST_BAND = "SELECT * FROM band;";
-    private static final String CREATE_BAND = "INSERT INTO band (name,year)VALUES =(?,?);";
-    private static final String UPDATE_BAND = "UPDATE band SET name=?, year=?, WHERE id=?;";
-    private static final String BAND_BY_ID = "SELECT * FROM band WHERE id=?;";
-    private static final String DELETE_BAND = "DELETE FROM band WHERE id=?";
-    private static final String SEARCH_BY_NAME_BAND = "SELECT * FROM band WHERE name LIKE ?";
+    private static final String LIST_BAND = "SELECT * FROM bands;";
+    private static final String CREATE_BAND = "INSERT INTO bands (name,year)VALUES =(?,?);";
+    private static final String UPDATE_BAND = "UPDATE bands SET nameBand=?, year=?, WHERE id=?;";
+    private static final String BAND_BY_ID = "SELECT * FROM bands WHERE id=?;";
+    private static final String DELETE_BAND = "DELETE FROM bands WHERE id=?";
+    private static final String SEARCH_BY_NAME_BAND = "SELECT * FROM bands WHERE nameBand LIKE ?";
    @Override
     public void save(Band band)  {
        try {
@@ -70,7 +70,7 @@ public class BandServiceIMPL implements IBandService{
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                String name = resultSet.getString("name");
+                String name = resultSet.getString("nameBand");
                 int year = resultSet.getInt("year");
                 band = new Band(id,name,year);
             }

@@ -39,7 +39,9 @@ public class BandController extends HttpServlet {
             case "show":
                 showListBand(request, response);
                 break;
-
+            case "showBand":
+                actionSearchBand(request, response);
+                break;
         }
     }
 
