@@ -1,8 +1,8 @@
 package rikkei.academy.controller;
 
-import rikkei.academy.model.Role;
-import rikkei.academy.model.RoleName;
-import rikkei.academy.model.User;
+import rikkei.academy.model.account.Role;
+import rikkei.academy.model.account.RoleName;
+import rikkei.academy.model.account.User;
 import rikkei.academy.service.role.IRoleService;
 import rikkei.academy.service.role.RoleServiceIMPL;
 import rikkei.academy.service.user.IUserService;

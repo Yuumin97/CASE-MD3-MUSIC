@@ -1,4 +1,6 @@
-package rikkei.academy.model;
+package rikkei.academy.model.account;
+
+import rikkei.academy.model.account.Role;
 
 import java.util.HashSet;
 import java.util.Set;
