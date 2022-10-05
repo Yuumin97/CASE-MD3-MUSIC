@@ -22,31 +22,32 @@ public class UserController extends HttpServlet {
 
     private IRoleService roleService = new RoleServiceIMPL();
     private IUserService userService = new UserServiceIMPL();
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         String action = request.getParameter("action");
-        if(action==null){
-            action="";
+        if (action == null) {
+            action = "";
         }
-        switch (action){
+        switch (action) {
             case "register":
-                showFormRegister(request,response);
+                showFormRegister(request, response);
                 break;
             case "login":
-                showFormLogin(request,response);
+                showFormLogin(request, response);
                 break;
             case "logout":
-                logOut(request,response);
+                logOut(request, response);
                 break;
             case "change_avatar":
-                showUpLoadAvatar(request,response);
+                showUpLoadAvatar(request, response);
                 break;
             case "profile":
                 showMyProfile(request, response);
                 break;
             case "change_pass":
-                showFormChangePass(request,response);
+                showFormChangePass(request, response);
                 break;
         }
     }
@@ -57,22 +58,22 @@ public class UserController extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 
         String action = request.getParameter("action");
-        if(action==null){
-            action="";
+        if (action == null) {
+            action = "";
         }
-        switch (action){
+        switch (action) {
             case "register":
-                actionRegister(request,response);
+                actionRegister(request, response);
                 break;
             case "login":
-                actionLogin(request,response);
+                actionLogin(request, response);
                 break;
             case "change_avatar":
-                actionUpLoadAvatar(request,response);
+                actionUpLoadAvatar(request, response);
                 break;
             case "change_pass":
                 try {
-                    actionChangePass(request,response);
+                    actionChangePass(request, response);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -82,17 +83,19 @@ public class UserController extends HttpServlet {
 
     public void destroy() {
     }
+
     public void showFormRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
-        dispatcher.forward(request,response);
+        dispatcher.forward(request, response);
     }
+
     public void actionRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String role = "user";
         Set<String> strRole = new HashSet<>();
         Set<Role> roles = new HashSet<>();
         strRole.add(role);
-        strRole.forEach(role1->{
-            switch (role1){
+        strRole.forEach(role1 -> {
+            switch (role1) {
                 case "admin":
                     Role adminRole = roleService.findByName(RoleName.ADMIN);
                     roles.add(adminRole);
@@ -106,50 +109,55 @@ public class UserController extends HttpServlet {
                     roles.add(userRole);
             }
         });
-        System.out.println("roles set ---> "+roles);
+        System.out.println("roles set ---> " + roles);
+
         String name = request.getParameter("name");
         String username = request.getParameter("username");
-        if(userService.existedByUsername(username)){
+        if (userService.existedByUsername(username)) {
             request.setAttribute("message", "The username existed! Please try again!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
-            dispatcher.forward(request,response);
+            dispatcher.forward(request, response);
 //            return;
         }
         String email = request.getParameter("email");
-        if(userService.existedByEmail(email)){
+        if (userService.existedByEmail(email)) {
             request.setAttribute("message", "The email existed! Please try again!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
-            dispatcher.forward(request,response);
+            dispatcher.forward(request, response);
 //            return;
         }
         String password = request.getParameter("password");
         String confirm_pass = request.getParameter("repeat_pass");
-        if(!password.equals(confirm_pass)){
+        if (!password.equals(confirm_pass)) {
             request.setAttribute("message", "The password do not match!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
-            dispatcher.forward(request,response);
+            dispatcher.forward(request, response);
             return;
         }
-        User user = new User(name,username,email,password,roles);
+        User user = new User(name, username, email, password, roles);
         userService.save(user);
         request.setAttribute("success", "Create user success!!");
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
-        dispatcher.forward(request,response);
+        dispatcher.forward(request, response);
     }
+
     //LOGIN
     public void showFormLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/login.jsp");
-        dispatcher.forward(request,response);
+        dispatcher.forward(request, response);
     }
+
     public void actionLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User user = userService.findByUsernameAndPassword(username,password);
+        User user = userService.findByUsernameAndPassword(username, password);
+
         String pageJSP = "";
-        if(user!=null){
+        if (user != null) {
+
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            System.out.println("get userlogin ---> "+session.getAttribute("user"));
+            System.out.println("get userlogin ---> " + session.getAttribute("user"));
             pageJSP = "WEB-INF/profile/profile.jsp";
 //            Cookie cookieName = new Cookie("username",username);
 //            Cookie cookiePass = new Cookie("password",password);
@@ -159,44 +167,51 @@ public class UserController extends HttpServlet {
 ////            response.addCookie(cookiePass);
 
         } else {
+
             pageJSP = "WEB-INF/form-login/login.jsp";
         }
+        request.setAttribute("message", "Wrong username or password");
         RequestDispatcher dispatcher = request.getRequestDispatcher(pageJSP);
-        dispatcher.forward(request,response);
+        dispatcher.forward(request, response);
     }
 
     //LOG OUT
     public void logOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
-        if(session!=null){
+        if (session != null) {
             session.removeAttribute("user");
             session.invalidate();
             response.sendRedirect("index.jsp");
         }
     }
+
     //CHANGE AVATAR
     public void showUpLoadAvatar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/upload/upload_avatar.jsp");
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
+
     public void actionUpLoadAvatar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String avatar = request.getParameter("avatar");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         int id = user.getId();
-        userService.changeAvatar(avatar,id);
-        request.setAttribute("avatar",avatar);
+        userService.changeAvatar(avatar, id);
+        request.setAttribute("avatar", avatar);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/profile/profile.jsp");
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
+
     public void showMyProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/profile/profile.jsp");
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
+
     public void showFormChangePass(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/form-login/change_pass.jsp");
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
+
     public void actionChangePass(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         User userLogin = (User) request.getSession().getAttribute("user");
 
@@ -223,4 +238,5 @@ public class UserController extends HttpServlet {
         request.setAttribute("success", "Change password success");
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
+
 }

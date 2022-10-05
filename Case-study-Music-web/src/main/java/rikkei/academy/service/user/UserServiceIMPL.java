@@ -23,7 +23,7 @@ public class UserServiceIMPL implements IUserService {
     private final String FIND_ROLE_BY_USER = "SELECT role_id FROM user_role WHERE user_id=?;";
     private final String FIND_BY_USERNAME_PASSWORD = "SELECT * FROM users WHERE username=?AND password=?";
     private final String CHANGE_AVATAR = "UPDATE users SET avatar = ? WHERE id=?;";
-    private final String UPDATE_USER = "UPDATE users SET  password = ? WHERE id=?;";
+    private final String UPDATE_USER = "UPDATE users SET name=?,email=?,password = ?WHERE id=?;";
 
     @Override
     public void save(User user) {
@@ -64,8 +64,10 @@ public class UserServiceIMPL implements IUserService {
         try  {
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER);
-            ps.setString(1, user.getPassword());
-            ps.setInt(2, user.getId());
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3,user.getPassword());
+            ps.setInt(4, user.getId());
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {

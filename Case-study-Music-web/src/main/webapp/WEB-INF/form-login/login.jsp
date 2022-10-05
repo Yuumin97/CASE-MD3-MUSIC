@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -40,6 +41,9 @@
                     <form style="width: 23rem;" method="post">
 
                         <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
+                        <c:if test='${requestScope["message"]!=null}'>
+                            <span style="color: red">${requestScope["message"]}</span>
+                        </c:if>
 
                         <div class="form-outline mb-4">
                             <input name="username" type="text" id="form2Example18" class="form-control form-control-lg" />
@@ -47,13 +51,16 @@
                         </div>
 
                         <div class="form-outline mb-4">
+
                             <input name="password" type="password" id="form2Example28" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example28">Password</label>
                         </div>
 
                         <div class="pt-1 mb-4">
                             <button  class="btn btn-info btn-lg btn-block" type="submit">Login</button>
+
                         </div>
+
 
                         <%--                        <p class="small mb-5 pb-lg-2"><a class="text-muted" href="#!">Forgot password?</a></p>--%>
                         <p>Don't have an account? <a href="users?action=register" class="link-info">Register here</a></p>
