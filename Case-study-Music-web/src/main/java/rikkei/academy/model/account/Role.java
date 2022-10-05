@@ -1,4 +1,4 @@
-package rikkei.academy.model;
+package rikkei.academy.model.account;
 
 public class Role {
     private int id;

@@ -7,7 +7,7 @@ public class Singer {
     private int birthDay;
     private String gender;
 
-    public Singer(int id, int birthday, String name, String gender) {
+    public Singer() {
     }
 
     public Singer(int id, String name, int birthDay, String gender) {
@@ -22,6 +22,8 @@ public class Singer {
         this.birthDay=birthday;
         this.gender=gender;
     }
+
+
 
     public int getId() {
         return id;

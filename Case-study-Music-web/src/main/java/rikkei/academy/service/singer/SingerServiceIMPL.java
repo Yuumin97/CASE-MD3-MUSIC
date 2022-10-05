@@ -13,7 +13,7 @@ import java.util.List;
 public class SingerServiceIMPL implements ISingerService{
     private Connection connection = ConnectMySQL.getConnection();
     private static final String CREATE_SINGER = "INSERT INTO singer(name,birthday,gender) VALUES (?,?,?)";
-    private static final String LIST_SINGER = "SELECT *FROM singer WHERE  id = ?;";
+    private static final String LIST_SINGER = "SELECT * FROM singer";
     private static final String SINGER_BY_ID = "SELECT * FROM singer WHERE id=?;";
     private static final String UPDATE_SINGER = "UPDATE singer SET name=?, brithday=?,gender=?, WHERE id=?;";
     private static final String DELETE_SINGER = "DELETE FROM singer WHERE id=?";
@@ -32,7 +32,7 @@ public class SingerServiceIMPL implements ISingerService{
                 String name = resultSet.getString("name");
                 String gender = resultSet.getString("gender");
 
-                Singer singer = new Singer(id,birthday,name,gender);
+                Singer singer = new Singer(id,name,birthday,gender);
                 singerListSearch.add(singer);
 
             }
@@ -53,14 +53,13 @@ public class SingerServiceIMPL implements ISingerService{
                 String name = resultSet.getString("name");
                 int birthday= resultSet.getInt("birthday");
                 String gender = resultSet.getString("gender");
-
                 Singer singer = new Singer(id, name, birthday,gender);
                 singerList.add(singer);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return singerList;
     }
 
     @Override

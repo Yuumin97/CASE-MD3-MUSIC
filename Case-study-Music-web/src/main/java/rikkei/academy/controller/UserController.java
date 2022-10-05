@@ -1,14 +1,15 @@
 package rikkei.academy.controller;
 
-import rikkei.academy.model.Role;
-import rikkei.academy.model.RoleName;
-import rikkei.academy.model.User;
+import rikkei.academy.model.account.Role;
+import rikkei.academy.model.account.RoleName;
+import rikkei.academy.model.account.User;
 import rikkei.academy.service.role.IRoleService;
 import rikkei.academy.service.role.RoleServiceIMPL;
 import rikkei.academy.service.user.IUserService;
 import rikkei.academy.service.user.UserServiceIMPL;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
@@ -47,7 +48,11 @@ public class UserController extends HttpServlet {
         }
         switch (action) {
             case "register":
-                actionRegister(request, response);
+                try {
+                    actionRegister(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case "login":
                 actionLogin(request,response);
@@ -64,7 +69,7 @@ public class UserController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    public void actionRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void actionRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         String role = "admin";
         Set<String> strRole = new HashSet<>();
         Set<Role> roles = new HashSet<>();

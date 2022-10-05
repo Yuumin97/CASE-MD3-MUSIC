@@ -33,5 +33,7 @@
         </div>
     </div>
 </nav>
+<a href="singer?action=show">Create Singer</a>
+<a href="band?action=showBand">Create Band</a>
 </body>
 </html>

@@ -34,8 +34,9 @@ public class SingerController extends HttpServlet {
             case "detail":
                 formDetailSinger(request,response);
                 break;
-            default:
+            case "show":
                 showListSinger(request, response);
+                break;
 
         }
     }
@@ -58,20 +59,23 @@ public class SingerController extends HttpServlet {
             case "delete":
                 actionDeleteSinger(request,response);
                 break;
-            default:
+            case "show":
                 actionSearchSinger(request,response);
+                break;
 
 
 
 
         }
     }
+    //SHOW
     public void showListSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Singer> singerList = singerService.findAll();
         request.setAttribute("listSinger", singerList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/list.jsp");
         dispatcher.forward(request, response);
     }
+    //CREATE
     public void showFormCreateSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/create.jsp");
         dispatcher.forward(request, response);
@@ -79,15 +83,78 @@ public class SingerController extends HttpServlet {
 
     public void actionCreateSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
-        int birthday = Integer.parseInt(request.getParameter("age"));
+        int birthday = Integer.parseInt(request.getParameter("birthday"));
         String gender = request.getParameter("gender");
         Singer singer = new Singer(birthday,name,gender);
         singerService.save(singer);
         request.setAttribute("message", "Create Singer success !!!");
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/create.jsp");
         dispatcher.forward(request, response);
+
+
+    }
+//SEARCH
+    private void actionSearchSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String name = request.getParameter("search");
+        List<Singer> singerListSearch = singerService.findByName(name);
+        request.setAttribute("listSinger", singerListSearch);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/list.jsp");
+        dispatcher.forward(request, response);
+        System.out.println("==================tìm ==== "+singerService.findByName(name));
+    }
+
+   //DELETE
+    private void actionDeleteSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        singerService.deleteById(id);
+        request.setAttribute("message", "Delete success!");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/delete.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void fromDeleteSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Singer singer = singerService.findById(id);
+//        System.out.println("singer show ---> "+singer);
+        request.setAttribute("singer",singer);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/delete.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    //DETAIL
+    private void formDetailSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Singer singer = singerService.findById(id);
+        request.setAttribute("singer",singer);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/detail.jsp");
+        dispatcher.forward(request, response);
     }
 
 
+
+    //EDIT
+    private void actionEditSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Singer singer = singerService.findById(id);
+        String name = request.getParameter("name");
+        int birthday = Integer.parseInt(request.getParameter("birthday"));
+        String gender = request.getParameter("gender");
+        singer.setName(name);
+        singer.setBirthDay(birthday);
+        singer.setGender(gender);
+        singerService.save(singer);
+        request.setAttribute("message", "Edit success!");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/edit.jsp");
+        dispatcher.forward(request, response);
+
+    }
+    public void showFormEditSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Singer singer = singerService.findById(id);
+//        System.out.println("singer show ---> "+singer);
+        request.setAttribute("singer",singer);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/edit.jsp");
+        dispatcher.forward(request, response);
+    }
 
 }
