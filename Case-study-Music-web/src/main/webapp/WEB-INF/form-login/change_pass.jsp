@@ -19,11 +19,11 @@
 </c:if>
 <form method="post">
     Old password <br>
-    <input type="text" name="old-pass"><br>
+    <input type="password" name="old-pass"><br>
     New password<br>
-    <input type="text" name="new-pass"><br>
+    <input type="password" name="new-pass"><br>
     Repeat password<br>
-    <input type="text" name="repeat-pass"><br>
+    <input type="password" name="repeat-pass"><br>
     <button>Submit</button>
 </form>
 <a href="/">Home</a>

@@ -151,12 +151,12 @@ public class UserController extends HttpServlet {
             session.setAttribute("user", user);
             System.out.println("get userlogin ---> "+session.getAttribute("user"));
             pageJSP = "WEB-INF/profile/profile.jsp";
-            Cookie cookieName = new Cookie("username",username);
-            Cookie cookiePass = new Cookie("password",password);
-            cookieName.setMaxAge(10000);
-            cookiePass.setMaxAge(10000);
-            response.addCookie(cookieName);
-            response.addCookie(cookiePass);
+//            Cookie cookieName = new Cookie("username",username);
+//            Cookie cookiePass = new Cookie("password",password);
+////            cookieName.setMaxAge(10000);
+////            cookiePass.setMaxAge(10000);
+////            response.addCookie(cookieName);
+////            response.addCookie(cookiePass);
 
         } else {
             pageJSP = "WEB-INF/form-login/login.jsp";

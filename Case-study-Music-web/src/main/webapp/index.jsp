@@ -54,7 +54,7 @@
 <%--        </div>--%>
 <%--    </div>--%>
 <%--</nav>--%>
-<h1>WEBSITE TRỘM CHÓ!</h1>
+<h1>WEBSITE MUSIC!</h1>
 <footer class="text-center text-lg-start bg-light text-muted">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
