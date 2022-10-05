@@ -1,13 +1,9 @@
 package rikkei.academy.service.user;
-
 import rikkei.academy.config.ConnectMySQL;
 import rikkei.academy.model.account.Role;
 import rikkei.academy.model.account.User;
-import rikkei.academy.model.account.User;
 import rikkei.academy.service.role.IRoleService;
 import rikkei.academy.service.role.RoleServiceIMPL;
-
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;

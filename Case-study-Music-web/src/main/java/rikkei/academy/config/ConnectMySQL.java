@@ -13,10 +13,13 @@ public class ConnectMySQL {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(URL,USER,PASS);
+            System.out.println("Ket noi thanh cong");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
+            System.out.println("Ket noi that bai");
             throw new RuntimeException(e);
+
         }
         return connection;
     }

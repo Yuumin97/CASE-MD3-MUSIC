@@ -175,8 +175,13 @@
     </div>
 <<<<<<< HEAD
 </nav>
+<<<<<<< HEAD
 <a href="category?action=create">Create category</a>
 </footer>
 
+=======
+<a href="singer?action=show">Create Singer</a>
+<a href="band?action=showBand">Create Band</a>
+>>>>>>> nam
 </body>
 </html>
