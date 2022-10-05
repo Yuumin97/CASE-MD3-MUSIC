@@ -9,6 +9,7 @@ import rikkei.academy.service.user.IUserService;
 import rikkei.academy.service.user.UserServiceIMPL;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
@@ -44,6 +45,9 @@ public class UserController extends HttpServlet {
             case "profile":
                 showMyProfile(request, response);
                 break;
+            case "change_pass":
+                showFormChangePass(request,response);
+                break;
         }
     }
 
@@ -66,8 +70,12 @@ public class UserController extends HttpServlet {
             case "change_avatar":
                 actionUpLoadAvatar(request,response);
                 break;
-            case "changePass":
-                actionChangePass(request,response);
+            case "change_pass":
+                try {
+                    actionChangePass(request,response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
         }
     }
@@ -185,18 +193,34 @@ public class UserController extends HttpServlet {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/profile/profile.jsp");
         requestDispatcher.forward(request,response);
     }
-    public void showFormChangePass(HttpServletRequest request, HttpServletResponse response){
-
+    public void showFormChangePass(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/form-login/change_pass.jsp");
+        requestDispatcher.forward(request,response);
     }
-    public void actionChangePass(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String oldPass = request.getParameter("oldPass");
-        String newPass = request.getParameter("newPass");
-        String repeatPass = request.getParameter("repeatPass");
+    public void actionChangePass(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        User userLogin = (User) request.getSession().getAttribute("user");
 
-        if (!newPass.equals(repeatPass)){
-            request.setAttribute("message","Repeat pass not match");
-            request.getRequestDispatcher("/form-login/change_pass.jsp").forward(request,response);
+        String oldPass = request.getParameter("old-pass");
+        String newPass = request.getParameter("new-pass");
+        String repeatPass = request.getParameter("repeat-pass");
 
+        if (!newPass.equals(repeatPass)) {
+            request.setAttribute("message", "Repeat password not match");
+            request.getRequestDispatcher("WEB-INF/form-login/change_pass.jsp").forward(request, response);
+            return;
         }
+
+        if (!userLogin.getPassword().equals(oldPass)) {
+            request.setAttribute("message", "Old password not match");
+            request.getRequestDispatcher("WEB-INF/form-login/change_pass.jsp").forward(request, response);
+            return;
+        }
+
+        userLogin.setPassword(newPass);
+        userService.update(userLogin);
+        request.getSession().setAttribute("user", userLogin);
+
+        request.setAttribute("success", "Change password success");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

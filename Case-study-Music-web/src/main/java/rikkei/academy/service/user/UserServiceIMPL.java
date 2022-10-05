@@ -59,6 +59,17 @@ public class UserServiceIMPL implements IUserService{
     }
 
     @Override
+    public void update(User user) throws SQLException {
+        try (
+                PreparedStatement ps = connection.prepareStatement(UPDATE_USER);
+        ) {
+            ps.setString(1, user.getPassword());
+            ps.setInt(2, user.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    @Override
     public boolean existedByUsername(String username) {
         List<String> listUsername = new ArrayList<>();
         try {
@@ -161,18 +172,5 @@ public class UserServiceIMPL implements IUserService{
         }
     }
 
-    @Override
-    public void changePassword(String password, int id) {
-        try {
-            connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER);
-            preparedStatement.setString(1,password);
-            preparedStatement.setInt(2,id);
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }

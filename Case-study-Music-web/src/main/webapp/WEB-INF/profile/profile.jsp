@@ -54,6 +54,17 @@
                             </c:if>
                             <p>Web Designer</p>
                             <i class="far fa-edit mb-5"></i>
+                            <c:if test="${requestScope['success'] != null}">
+                                <p style="color: lightseagreen">${requestScope['success']}</p>
+                            </c:if>
+
+
+                            <a href="users?action=change_pass">
+                                <button>Change pass</button>
+                            </a><br><br>
+                            <c:if test="${sessionScope['role'] == 'ADMIN' }">
+                                menu admin
+                            </c:if>
                         </div>
                         <div class="col-md-8" style="padding: 70px 0; border: 3px solid green; text-align: center; ">
                             <div class="card-body p-4">

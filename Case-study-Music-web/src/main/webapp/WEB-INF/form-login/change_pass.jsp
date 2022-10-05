@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Asus
@@ -11,15 +12,20 @@
     <title>Title</title>
 </head>
 <body>
+<h1>Change pass</h1>
 
+<c:if test="${requestScope['message'] != null}">
+    <p style="color: red">${requestScope['message']}</p>
+</c:if>
 <form method="post">
-    Old password
-    <input type="text" name="oldPass">
-    New password
-    <input type="text" name="oldPass">
-    Repeat password
-    <input type="text" name="oldPass">
-    <button></button>
+    Old password <br>
+    <input type="text" name="old-pass"><br>
+    New password<br>
+    <input type="text" name="new-pass"><br>
+    Repeat password<br>
+    <input type="text" name="repeat-pass"><br>
+    <button>Submit</button>
 </form>
+<a href="/">Home</a>
 </body>
 </html>
