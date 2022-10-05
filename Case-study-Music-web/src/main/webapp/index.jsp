@@ -33,5 +33,6 @@
         </div>
     </div>
 </nav>
+<a href="category?action=create">Create category</a>
 </body>
 </html>

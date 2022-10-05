@@ -1,8 +1,8 @@
-package rikkei.academy.controller;
+package rikkei.academy.controller.account;
 
-import rikkei.academy.model.Role;
-import rikkei.academy.model.RoleName;
-import rikkei.academy.model.User;
+import rikkei.academy.model.account.Role;
+import rikkei.academy.model.account.RoleName;
+import rikkei.academy.model.account.User;
 import rikkei.academy.service.role.IRoleService;
 import rikkei.academy.service.role.RoleServiceIMPL;
 import rikkei.academy.service.user.IUserService;
@@ -65,7 +65,7 @@ public class UserController extends HttpServlet {
     }
 
     public void actionRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String role = "admin";
+        String role = "user";
         Set<String> strRole = new HashSet<>();
         Set<Role> roles = new HashSet<>();
         strRole.add(role);
@@ -84,7 +84,6 @@ public class UserController extends HttpServlet {
                     roles.add(userRole);
             }
         });
-        System.out.println("roles set ---->" + roles);
         String name = request.getParameter("name");
         String username = request.getParameter("username");
         if (userService.existedByUsername(username)) {
