@@ -6,5 +6,8 @@ import rikkei.academy.service.IGenericService;
 public interface IUserService extends IGenericService<User> {
     boolean existedByUsername(String username);
     boolean existedByEmail(String email);
-    User checkLogin(String username, String password);
+    User findById(int id);
+    User findByUsernameAndPassword(String username, String password);
+    void changeAvatar(String avatar, int id);
+
 }

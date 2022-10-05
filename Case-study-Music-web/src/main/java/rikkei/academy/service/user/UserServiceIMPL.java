@@ -2,8 +2,11 @@ package rikkei.academy.service.user;
 
 import rikkei.academy.config.ConnectMySQL;
 import rikkei.academy.model.account.Role;
-import rikkei.academy.model.account.RoleName;
 import rikkei.academy.model.account.User;
+import rikkei.academy.model.account.User;
+import rikkei.academy.service.role.IRoleService;
+import rikkei.academy.service.role.RoleServiceIMPL;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,12 +15,18 @@ import java.util.List;
 import java.util.Set;
 
 public class UserServiceIMPL implements IUserService {
+    private IRoleService roleService = new RoleServiceIMPL();
     private Connection connection = ConnectMySQL.getConnection();
-    private final String CREATE_USER = "INSERT INTO users(name, username, email, password) values (?,?,?,?);";
-    private final String INSERT_ROLE_ID_USER_TO ="INSERT INTO user_role(user_id, role_id) values (?,?);";
-    private final String FIND_ALL_USERNAME = "SELECT username from users;";
-    private final String FIND_ALL_EMAIL = "SELECT email from users;";
-    private final String SQL_CHECK_LOGIN = "select id, name, email from `users` where username = ? and password = ?;";
+    private final String CREATE_USER = "INSERT INTO users(name,username,email,password) values (?,?,?,?);";
+    private final String INSERT_ROLE_ID_USER_ID = "INSERT INTO user_role(user_id,role_id) values (?,?);";
+    private final String FIND_ALL_USERNAME = "SELECT username FROM users";
+    private final String FIND_ALL_EMAIL = "SELECT email FROM users";
+    private final String FIND_BY_ID_USER = "SELECT * FROM users WHERE id=?;";
+    private final String FIND_ROLE_BY_USER = "SELECT role_id FROM user_role WHERE user_id=?;";
+    private final String FIND_BY_USERNAME_PASSWORD = "SELECT * FROM users WHERE username=?AND password=?";
+    private final String CHANGE_AVATAR = "UPDATE users SET avatar = ? WHERE id=?;";
+    private final String UPDATE_USER = "UPDATE users SET  password = ? WHERE id=?;";
+
     @Override
     public void save(User user) {
         try {
@@ -29,18 +38,37 @@ public class UserServiceIMPL implements IUserService {
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            int user_id = 0;
-            while (resultSet.next()){
+            int user_id = 0; //LAY RA ID CUA USER DE TAO VAO BANG CHUNG GIAN
+            while (resultSet.next()) {
                 user_id = resultSet.getInt(1);
             }
-            PreparedStatement preparedStatement1 = connection.prepareStatement(INSERT_ROLE_ID_USER_TO);
+            //TAO DU LIEU CHO BANG TRUNG GIAN
+            PreparedStatement preparedStatement1 = connection.prepareStatement(INSERT_ROLE_ID_USER_ID);
             Set<Role> roles = user.getRoles();
-            List<Role> roleList = new ArrayList<>();
+            List<Role> roleList = new ArrayList<>(roles); // Convert tu Set -> List
+            List<Integer> listRoleId = new ArrayList<>();
             for (int i = 0; i < roleList.size(); i++) {
-                preparedStatement1.setInt(1,user_id);
-                preparedStatement1.setInt(2,roleList.get(i).getId());
-                preparedStatement1.executeQuery();
+                listRoleId.add(roleList.get(i).getId());
             }
+            for (int i = 0; i < listRoleId.size(); i++) {
+                preparedStatement1.setInt(1, user_id);
+                preparedStatement1.setInt(2, listRoleId.get(i));
+                preparedStatement1.executeUpdate();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(User user) {
+        try  {
+            connection.setAutoCommit(false);
+            PreparedStatement ps = connection.prepareStatement(UPDATE_USER);
+            ps.setString(1, user.getPassword());
+            ps.setInt(2, user.getId());
+            ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -53,11 +81,11 @@ public class UserServiceIMPL implements IUserService {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_USERNAME);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 listUsername.add(resultSet.getString("username"));
             }
             for (int i = 0; i < listUsername.size(); i++) {
-                if (username.equals(listUsername.get(i))){
+                if (username.equals(listUsername.get(i))) {
                     return true;
                 }
             }
@@ -73,11 +101,11 @@ public class UserServiceIMPL implements IUserService {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_EMAIL);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 listEmail.add(resultSet.getString("email"));
             }
             for (int i = 0; i < listEmail.size(); i++) {
-                if (email.equals(listEmail.get(i))){
+                if (email.equals(listEmail.get(i))) {
                     return true;
                 }
             }
@@ -88,43 +116,70 @@ public class UserServiceIMPL implements IUserService {
     }
 
     @Override
-    public User checkLogin(String username, String password) {
+    public User findById(int id) {
         User user = null;
-        try (
-                PreparedStatement ps = connection.prepareStatement(SQL_CHECK_LOGIN)
-        ) {
+        try {
             connection.setAutoCommit(false);
-
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String email = rs.getString(3);
-
-                user = new User(id, name, username, email, password);
-                Set<Role> roleSet = new HashSet<>();
-                String SQL_FIND_ROLE = "select r.id, rolename from role_user ru join role r on ru.id_role = r.id where id_user = ?";
-                PreparedStatement ps_role = connection.prepareStatement(SQL_FIND_ROLE);
-                ps_role.setInt(1, user.getId());
-                ResultSet rs_role = ps_role.executeQuery();
-
-                while (rs_role.next()) {
-                    int id_role = rs_role.getInt(1);
-                    String roleName = rs_role.getString(2);
-                    roleSet.add(new Role(id_role, RoleName.valueOf(roleName.toUpperCase())));
-                }
-
-                user.setRoles(roleSet);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_USER);
+            preparedStatement.setInt(1, id);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(FIND_ROLE_BY_USER);
+            preparedStatement1.setInt(1, id);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            int id_role = 0;
+            Set<Role> roles = new HashSet<>();
+            while (resultSet.next()) {
+                id_role = resultSet.getInt("role_id");
+                Role role = roleService.findById(id_role);
+                roles.add(role);
+            }
+            ResultSet resultSet1 = preparedStatement.executeQuery();
+            while (resultSet1.next()) {
+                String name = resultSet1.getString("name");
+                String password = resultSet1.getString("password");
+                user = new User(id, name, roles);
+                user.setPassword(password);
 
             }
+            connection.commit();
+            return user;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
 
+    @Override
+    public User findByUsernameAndPassword(String username, String password) {
+        User user = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USERNAME_PASSWORD);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                user = findById(id);
+                return user;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public void changeAvatar(String avatar, int id) {
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_AVATAR);
+            preparedStatement.setString(1, avatar);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return user;
     }
+
+
 }
