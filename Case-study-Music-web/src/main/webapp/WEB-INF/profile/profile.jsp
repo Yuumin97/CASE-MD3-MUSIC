@@ -23,6 +23,7 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 <head>
     <title>Title</title>
 </head>
@@ -36,16 +37,14 @@
                 <div class="card mb-3" style="border-radius: .5rem;">
                     <div class="row g-0">
                         <div class="col-md-4 gradient-custom text-center text-black"
-                             style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem; padding: 140px 0; border: 3px solid green; text-align: center; ">
+                             style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem; padding: 240px 0; border: 3px solid ; text-align: center; ">
                             <c:if test='${requestScope["avatar"]==null}'>
-                                <li class="nav-item">
-                                    <a href="users?action=change_avatar">Change Avatar</a>
-                                </li>
+                                    <a href="users?action=change_avatar"><button type="button" class="btn btn-primary">Change avatar</button></a>
                             </c:if>
 
                             <c:if test='${requestScope["avatar"]!=null}'>
 
-                                <img width="80px" height="80px" style="border-radius: 50%"
+                                <img width="120px" height="120px" style="border-radius: 50%"
                                      src="${requestScope["avatar"]}" alt="">
 
                             </c:if>
@@ -54,31 +53,28 @@
                             </c:if>
                             <p>Web Designer</p>
                             <i class="far fa-edit mb-5"></i>
-                            <c:if test='${requestScope["success"] != null}'>
-                                <p style="color: lightseagreen">${requestScope['success']}</p>
-                            </c:if>
-                            <a href="users?action=change_pass">
-                                <button>Change pass</button>
-                            </a><br>
-<%--                            <c:if test="${sessionScope['role'] == 'ADMIN' }">--%>
-<%--                                menu admin--%>
-<%--                            </c:if>--%>
+
+                            <%--                            <c:if test="${sessionScope['role'] == 'ADMIN' }">--%>
+                            <%--                                menu admin--%>
+                            <%--                            </c:if>--%>
                         </div>
-                        <div class="col-md-8" style="padding: 70px 0; border: 3px solid green; text-align: center; ">
+                        <div class="col-md-8" style="padding: 70px 0; border: 3px solid ; text-align: center; ">
                             <div class="card-body p-4">
-                                <h6>Information</h6>
+                                <h6><i class="bi bi-info-circle-fill"></i> Information</h6>
                                 <hr class="mt-0 mb-4">
                                 <div class="row pt-1">
                                     <div class="col-6 mb-3">
-                                        <h6>Email</h6>
-                                        <p class="text-muted">info@example.com</p>
+                                        <h6><i class="bi bi-envelope-fill"></i> Email</h6>
+                                        <c:if test="${user.email!=null}">
+                                            <p >${user.email}</p>
+                                        </c:if>
                                     </div>
                                     <div class="col-6 mb-3">
                                         <h6>Phone</h6>
                                         <p class="text-muted">123 456 789</p>
                                     </div>
                                 </div>
-                                <h6>Projects</h6>
+                                <h6><i class="bi bi-kanban"></i> Projects : Music web</h6>
                                 <hr class="mt-0 mb-4">
                                 <div class="row pt-1">
                                     <div class="col-6 mb-3">
@@ -95,7 +91,25 @@
                                 <%--                                    <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>--%>
                                 <%--                                    <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>--%>
                                 <%--                                </div>--%>
-                                <button><a href="users?action=logout">LOG OUT</a></button>
+                                <div style="padding: 10px">
+                                    <c:if test='${requestScope["success"] != null}'>
+                                        <p style="color: lightseagreen">${requestScope['success']}</p>
+                                    </c:if>
+                                    <a href="users?action=change_pass">
+                                        <button type="button" class="btn btn-primary">Change password</button>
+                                    </a>
+
+                                    <a href="users?action=change_profile">
+                                        <button type="button" class="btn btn-primary">Change profile</button>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <a href="users?action=logout">
+                                        <button type="button" class="btn btn-primary">Log out</button>
+                                    </a>
+
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -71,7 +71,7 @@
 
             </div>
             <div class="col-sm-6 px-0 d-none d-sm-block">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img3.webp"
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.wikidata.org%2Fwiki%2FQ146&psig=AOvVaw2XQjmOzOMoqhK8ndClipiv&ust=1665093081018000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKDrlZ6JyvoCFQAAAAAdAAAAABAE"
                      alt="Login image" class="w-100 vh-100" style="object-fit: cover; object-position: left;">
             </div>
         </div>

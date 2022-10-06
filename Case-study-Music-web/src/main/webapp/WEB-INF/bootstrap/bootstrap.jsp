@@ -20,13 +20,14 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 <head>
     <title>Title</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.jsp">HOME</a>
+        <a class="navbar-brand" href="index.jsp"><i class="bi bi-house-door-fill"></i> HOME</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -35,7 +36,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <c:if test="${user.name==null}">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="users?action=register">REGISTER</a>
+                        <a class="nav-link active" aria-current="page" href="users?action=register"><i class="bi bi-r-circle"></i> REGISTER</a>
                     </li>
                 </c:if>
                 <c:if test="${user.name==null}">

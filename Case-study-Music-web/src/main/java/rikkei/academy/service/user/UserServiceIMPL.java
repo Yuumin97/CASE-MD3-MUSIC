@@ -23,7 +23,7 @@ public class UserServiceIMPL implements IUserService {
     private final String FIND_ROLE_BY_USER = "SELECT role_id FROM user_role WHERE user_id=?;";
     private final String FIND_BY_USERNAME_PASSWORD = "SELECT * FROM users WHERE username=?AND password=?";
     private final String CHANGE_AVATAR = "UPDATE users SET avatar = ? WHERE id=?;";
-    private final String UPDATE_USER = "UPDATE users SET name=?,email=?,password = ?WHERE id=?;";
+    private final String UPDATE_USER = "UPDATE users SET name=?, email=?, password = ?WHERE id=?;";
 
     @Override
     public void save(User user) {
@@ -36,7 +36,7 @@ public class UserServiceIMPL implements IUserService {
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            int user_id = 0; //LAY RA ID CUA USER DE TAO VAO BANG CHUNG GIAN
+                int user_id = 0; //LAY RA ID CUA USER DE TAO VAO BANG CHUNG GIAN
             while (resultSet.next()) {
                 user_id = resultSet.getInt(1);
             }
@@ -66,7 +66,7 @@ public class UserServiceIMPL implements IUserService {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER);
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
-            ps.setString(3,user.getPassword());
+            ps.setString(3, user.getPassword());
             ps.setInt(4, user.getId());
             ps.executeUpdate();
             connection.commit();
@@ -180,6 +180,7 @@ public class UserServiceIMPL implements IUserService {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }

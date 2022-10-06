@@ -120,8 +120,8 @@ To change this template use File | Settings | File Templates.
                 let divLocation = document.getElementById("imgDiv");
                 let imgElement = document.createElement("img");
                 imgElement.src = downloadURL
-                imgElement.width = 100;
-                imgElement.height = 100;
+                imgElement.width = 150;
+                imgElement.height = 150;
                 console.log('pic ==', downloadURL)
                 divLocation.append(imgElement);
                 document.getElementById('avatar').value = downloadURL;

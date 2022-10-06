@@ -49,6 +49,9 @@ public class UserController extends HttpServlet {
             case "change_pass":
                 showFormChangePass(request, response);
                 break;
+            case "change_profile":
+                showFormChangeProfile(request,response);
+                break;
         }
     }
 
@@ -78,6 +81,14 @@ public class UserController extends HttpServlet {
                     throw new RuntimeException(e);
                 }
                 break;
+            case "change_profile" :
+                try {
+                    actionChangeProfile(request,response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+
         }
     }
 
@@ -232,11 +243,41 @@ public class UserController extends HttpServlet {
         }
 
         userLogin.setPassword(newPass);
-        userService.update(userLogin);
+        userService.update( userLogin);
         request.getSession().setAttribute("user", userLogin);
 
         request.setAttribute("success", "Change password success");
         request.getRequestDispatcher("index.jsp").forward(request, response);
+    }
+    public void showFormChangeProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/form-login/change_profile.jsp");
+        requestDispatcher.forward(request, response);
+    }
+    public void actionChangeProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        User userLogin = (User) request.getSession().getAttribute("user");
+
+        String oldName = request.getParameter("oldName");
+        String newName = request.getParameter("newName");
+        String oldEmail = request.getParameter("oldEmail");
+        String newEmail = request.getParameter("newEmail");
+        if (oldName.equals(newName)) {
+            request.setAttribute("message", "New name must be different");
+            request.getRequestDispatcher("WEB-INF/form-login/change_profile.jsp").forward(request, response);
+            return;
+        }
+        if (newEmail.equals(oldEmail)) {
+            request.setAttribute("message", "New email must be different");
+            request.getRequestDispatcher("WEB-INF/form-login/change_profile.jsp").forward(request, response);
+            return;
+        }
+        userLogin.setName(newName);
+        userLogin.setEmail(newEmail);
+        userService.update(userLogin);
+        request.getSession().setAttribute("user", userLogin);
+
+        request.setAttribute("success", "Change profile success");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+
     }
 
 }
