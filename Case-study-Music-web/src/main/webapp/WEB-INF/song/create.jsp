@@ -38,8 +38,24 @@
     <jsp:include page='../upload/upload_audio.jsp'>
         <jsp:param name="articleId" value=""/>
     </jsp:include>
-    <button type="submit">Create</button>
+
     <br>
+    <select id="category" name="category">
+        <c:forEach items='${requestScope["category"]}' var="st">
+            <option value="${st.id}"> ${st.name}</option>
+        </c:forEach>
+            </select>
+    <select multiple id="singer" name="singer">
+        <c:forEach items='${requestScope["singer"]}' var="sg">
+            <option value="${sg.id}"> ${sg.name}</option>
+        </c:forEach>
+    </select>
+    <select multiple id="band" name="band">
+        <c:forEach items='${requestScope["band"]}' var="bd">
+            <option value="${bd.id}">${bd.name}</option>
+        </c:forEach>
+    </select>
+    <button type="submit">Create</button>
     <a href="/song">Back Menu</a>
 </form>
 </body>

@@ -219,17 +219,17 @@
     </style>
   </head>
   <body>
+  <form method="get">
   <div class="player">
       <ul>
-          <li class="cover"><img src="http://i1285.photobucket.com/albums/a583/TheGreatOzz1/Hosted-Images/Noisy-Freeks-Image_zps4kilrxml.png"/></li>
+          <li class="cover"><img src="${requestScope["song"].img}"/></li>
           <li class="info">
               <h1>The Noisy Freaks</h1>
-              <h4>Premiere</h4>
-              <h2>I Need You Back</h2>
+              <h2>${requestScope["song"].name}</h2>
               <div class="button-items">
                   <audio id="music" preload="auto" loop="false">
-                      <source src="https://dl.dropbox.com/s/oswkgcw749xc8xs/The-Noisy-Freaks.mp3?dl=1" type="audio/mp3">
-                      <source src="https://dl.dropbox.com/s/75jpngrgnavyu7f/The-Noisy-Freaks.ogg?dl=1" type="audio/ogg">
+                      <source src="${requestScope["song"].audio}" type="audio/mp3">
+                      <source src="${requestScope["song"].audio}" type="audio/ogg">
                   </audio>
                   <div id="slider"><div id="elapsed"></div></div>
                   <p id="timer">0:00</p>
@@ -261,6 +261,7 @@
           </li>
       </ul>
   </div>
+  </form>
   <script>
       var music = document.getElementById("music");
       var playButton = document.getElementById("play");

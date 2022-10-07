@@ -1,7 +1,16 @@
 package rikkei.academy.controller.song;
 
 
+import rikkei.academy.model.music.Category;
+import rikkei.academy.model.singer.Band;
+import rikkei.academy.model.singer.Singer;
 import rikkei.academy.model.song.Song;
+import rikkei.academy.service.band.BandServiceIMPL;
+import rikkei.academy.service.band.IBandService;
+import rikkei.academy.service.category.CategoryServiceIMPL;
+import rikkei.academy.service.category.ICategoryService;
+import rikkei.academy.service.singer.ISingerService;
+import rikkei.academy.service.singer.SingerServiceIMPL;
 import rikkei.academy.service.song.ISongService;
 import rikkei.academy.service.song.SongServiceIMPL;
 
@@ -9,10 +18,16 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet({"/song"})
 public class SongController extends HttpServlet {
+    private ICategoryService categoryService = new CategoryServiceIMPL();
+    private ISingerService singerService = new SingerServiceIMPL();
+    private IBandService bandService = new BandServiceIMPL();
     private static final long serialVersionUID = 1L;
     public SongController() {
         super();
@@ -59,25 +74,38 @@ public class SongController extends HttpServlet {
     }
 
     private void actionCreateSong(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int categoryId = Integer.parseInt(request.getParameter("category"));
+        Category category = categoryService.findById(categoryId);
+        Set<Category> categories = new HashSet<>();
+        categories.add(category);
+        String[] singerId = request.getParameterValues("singer");
+        List<Integer> singerIdList = new ArrayList<>();
+        for (int i = 0; i < singerId.length; i++) {
+            singerIdList.add(Integer.parseInt(singerId[i]));
+        }
+        String[] bandId = request.getParameterValues("singer");
+        List<Integer> bandIdList = new ArrayList<>();
+        for (int i = 0; i < bandId.length; i++) {
+            singerIdList.add(Integer.parseInt(singerId[i]));
+        }
         String name = request.getParameter("name");
         int listen = Integer.parseInt(request.getParameter("listen"));
         String img = request.getParameter("avatar");
         String audio = request.getParameter("mp3");
-        Song song = new Song(name, listen,img,audio);
+        Song song = new Song(name,listen,img,audio,categories,singerIdList,bandIdList);
         songService.save(song);
         request.setAttribute("message", "Create Song success !!!");
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/song/create.jsp");
         dispatcher.forward(request, response);
-
-
     }
 
-    private void showListSong(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Song> songList = songService.findAll();
-        request.setAttribute("song", songList);
-        request.getRequestDispatcher("/index.jsp").forward(request,response);
-    }
     private void showCreateSong(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Category> categoryList = categoryService.findAll();
+        request.setAttribute("category", categoryList);
+        List<Singer> singerList= singerService.findAll();
+        request.setAttribute("singer", singerList);
+        List<Band> bandList = bandService.findAll();
+        request.setAttribute("band", bandList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/song/create.jsp");
         dispatcher.forward(request, response);
     }

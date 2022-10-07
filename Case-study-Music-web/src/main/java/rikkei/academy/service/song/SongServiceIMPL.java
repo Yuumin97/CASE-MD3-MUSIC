@@ -1,10 +1,13 @@
 package rikkei.academy.service.song;
 
+import rikkei.academy.model.music.Category;
+import rikkei.academy.model.singer.Singer;
 import rikkei.academy.model.song.Song;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static rikkei.academy.config.ConnectMySQL.getConnection;
 
@@ -18,18 +21,48 @@ public class SongServiceIMPL implements ISongService {
     private final String SONG_SEARCH = "SELECT * FROM songs WHERE name LIKE ?;";
     private final String SONG_BY_ID = "SELECT * FROM songs WHERE id=?;";
     private final String DELETE_SONG = "DELETE FROM songs WHERE id=?;";
+    private final String INSET_SONG_CATEGORY = "INSERT INTO songs_category VALUES (?, ?);";
+    private final String INSET_SONG_SINGER = "INSERT INTO songs_singer VALUES (?,?);";
+    private final String INSET_SONG_BAND = "INSERT INTO songs_singer VALUES (?,?);";
 
     @Override
     public void save(Song song) {
         try {
             if (findById(song.getId())==null){
                 connection.setAutoCommit(false);
-                PreparedStatement preparedStatement = connection.prepareStatement(ADD_SONG);
+                PreparedStatement preparedStatement = connection.prepareStatement(ADD_SONG, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, song.getName());
                 preparedStatement.setInt(2, song.getListen());
                 preparedStatement.setString(3, song.getImg());
                 preparedStatement.setString(4, song.getAudio());
                 preparedStatement.executeUpdate();
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                int id = 0;
+                while (resultSet.next()) {
+                    id = resultSet.getInt(1);
+                }
+                PreparedStatement preparedStatement1 = connection.prepareStatement(INSET_SONG_CATEGORY);
+                Set<Category> categories = song.getCategories();
+                List<Category> categoryList = new ArrayList<>(categories);
+                for (int i = 0; i < categoryList.size(); i++) {
+                    preparedStatement1.setInt(1,id);
+                    preparedStatement1.setInt(2,categoryList.get(i).getId());
+                    preparedStatement1.executeUpdate();
+                }
+                PreparedStatement preparedStatement2 = connection.prepareStatement(INSET_SONG_SINGER);
+                List<Integer> singerId = song.getSingerIdList();
+                for (int i = 0; i < singerId.size(); i++) {
+                    preparedStatement2.setInt(1,id);
+                    preparedStatement2.setInt(2,singerId.get(i));
+                    preparedStatement2.executeUpdate();
+                }
+                PreparedStatement preparedStatement3 = connection.prepareStatement(INSET_SONG_BAND);
+                List<Integer> bandId = song.getBandIdList();
+                for (int i = 0; i < bandId.size(); i++) {
+                    preparedStatement3.setInt(1,id);
+                    preparedStatement3.setInt(2,bandId.get(i));
+                    preparedStatement3.executeUpdate();
+                }
                 connection.commit();
             }else {
                 connection.setAutoCommit(false);
@@ -133,6 +166,7 @@ public class SongServiceIMPL implements ISongService {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 song = new Song();
+                song.setId(rs.getInt("id"));
                 song.setName(rs.getString("name"));
                 song.setListen(rs.getInt("listen"));
                 song.setImg(rs.getString("img"));
@@ -140,7 +174,6 @@ public class SongServiceIMPL implements ISongService {
                 list.add(song);
             }
             rs.close();
-
             rs = stmt.executeQuery("SELECT FOUND_ROWS()");
             if(rs.next())
                 this.noOfRecords = rs.getInt(1);
@@ -163,4 +196,5 @@ public class SongServiceIMPL implements ISongService {
     public int getNoOfRecords() {
         return noOfRecords;
     }
+
 }

@@ -16,14 +16,15 @@ import java.util.List;
 public class BandServiceIMPL implements IBandService{
     private Connection connection = ConnectMySQL.getConnection();
     private static final String LIST_BAND = "SELECT * FROM bands;";
-    private static final String CREATE_BAND = "INSERT INTO bands (name,year)VALUES =(?,?);";
-    private static final String UPDATE_BAND = "UPDATE bands SET nameBand=?, year=?, WHERE id=?;";
-    private static final String BAND_BY_ID = "SELECT * FROM bands WHERE id=?;";
-    private static final String DELETE_BAND = "DELETE FROM bands WHERE id=?";
+    private static final String CREATE_BAND = "INSERT INTO bands (nameBand,year)VALUES(?,?);";
+    private static final String UPDATE_BAND = "UPDATE bands SET nameBand=?, year=?, WHERE idBand=?;";
+    private static final String BAND_BY_ID = "SELECT * FROM bands WHERE idBand=?;";
+    private static final String DELETE_BAND = "DELETE FROM bands WHERE idBand=?";
     private static final String SEARCH_BY_NAME_BAND = "SELECT * FROM bands WHERE nameBand LIKE ?";
    @Override
     public void save(Band band)  {
        try {
+           connection.setAutoCommit(false);
            if (findById(band.getId())==null){
                PreparedStatement preparedStatement = connection.prepareStatement(CREATE_BAND);
                preparedStatement.setString(1, band.getName());
@@ -35,7 +36,7 @@ public class BandServiceIMPL implements IBandService{
                preparedStatement.setInt(2, band.getYear());
                preparedStatement.executeUpdate();
            }
-
+    connection.commit();
        } catch (SQLException e) {
            throw new RuntimeException(e);
        }

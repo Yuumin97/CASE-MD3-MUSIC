@@ -1,11 +1,45 @@
 package rikkei.academy.model.song;
 
+import rikkei.academy.model.music.Category;
+import rikkei.academy.model.singer.Band;
+import rikkei.academy.model.singer.Singer;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class Song {
     private int id;
     private String name;
     private int listen;
     private String img;
     private String audio;
+    private Set<Category> categories = new HashSet<>();
+
+    private List<Singer> singerList = new ArrayList<>();
+    private List<Integer> singerIdList = new ArrayList<>();
+    private List<Integer> bandIdList = new ArrayList<>();
+    private List<Band> bandList = new ArrayList<>();
+
+//    public Song(String name, int listen, String img, String audio, Set<Category> categories, List<Singer> singerList) {
+//        this.name = name;
+//        this.listen = listen;
+//        this.img = img;
+//        this.audio = audio;
+//        this.categories = categories;
+//        this.singerList = singerList;
+//    }
+
+    public Song(int id, String name, int listen, String img, String audio, Set<Category> categories) {
+        this.id = id;
+        this.name = name;
+        this.listen = listen;
+        this.img = img;
+        this.audio = audio;
+        this.categories = categories;
+    }
+
 
     public Song(String name, int listen, String img, String audio) {
         this.name = name;
@@ -38,6 +72,64 @@ public class Song {
 
     public Song() {
 
+    }
+
+    public Song(String name, int listen, String img, String audio, Set<Category> categories) {
+        this.name = name;
+        this.listen = listen;
+        this.img = img;
+        this.audio = audio;
+        this.categories = categories;
+    }
+
+    public Song(String name, int listen, String img, String audio, Set<Category> categories, List<Integer> singerIdList,List<Integer> bandIdList) {
+        this.name = name;
+        this.listen = listen;
+        this.img = img;
+        this.audio = audio;
+        this.categories = categories;
+        this.singerIdList = singerIdList;
+        this.bandIdList = bandIdList;
+    }
+
+    public List<Band> getBandList() {
+        return bandList;
+    }
+
+    public void setBandList(List<Band> bandList) {
+        this.bandList = bandList;
+    }
+
+    public List<Integer> getBandIdList() {
+        return bandIdList;
+    }
+
+    public void setBandIdList(List<Integer> bandIdList) {
+        this.bandIdList = bandIdList;
+    }
+
+    public List<Integer> getSingerIdList() {
+        return singerIdList;
+    }
+
+    public void setSingerIdList(List<Integer> singerIdList) {
+        this.singerIdList = singerIdList;
+    }
+
+    public List<Singer> getSingerList() {
+        return singerList;
+    }
+
+    public void setSingerList(List<Singer> singerList) {
+        this.singerList = singerList;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     public String getAudio() {

@@ -22,7 +22,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet"  href="songcss.css">
+    <link rel="stylesheet" href="songcss.css">
 
     <style>
         /* width */
@@ -46,6 +46,7 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
         .menu {
             position: fixed;
             top: 0;
@@ -212,15 +213,17 @@
 
         .music {
             display: grid;
-            grid-template-columns: repeat(5,1fr);
+            grid-template-columns: repeat(5, 1fr);
             column-gap: 10px;
             height: 200px;
         }
-        .topHit{
+
+        .topHit {
             display: grid;
-            grid-template-rows: 30% auto ;
+            grid-template-rows: 30% auto;
         }
-        .song{
+
+        .song {
             display: block;
             border-radius: 10px;
             background-color: #181818;
@@ -228,25 +231,30 @@
             margin: 0px 0px 16px;
             position: relative;
         }
-        .grid-row{
+
+        .grid-row {
             display: grid;
             margin-top: 80px;
-            grid-template-rows: repeat(6,300px);
+            grid-template-rows: repeat(6, 300px);
             row-gap: 100px;
 
         }
-        body{
-            background-color:#121212 ;
+
+        body {
+            background-color: #121212;
         }
+
         h2 {
             color: #cfd6db;
             font-family: fantasy;
         }
-        p{
+
+        p {
             color: #cfd6db;
             font-family: fantasy;
         }
-        .play-song{
+
+        .play-song {
             width: 50px;
             height: 50px;
             background-color: aqua;
@@ -254,37 +262,41 @@
             position: absolute;
             top: 70%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             opacity: 0;
             transition-duration: 0.5s;
         }
-        .song:hover .play-song{
+
+        .song:hover .play-song {
             opacity: 1;
             top: 50%;
         }
+
         .bi-play-circle-fill {
             font-size: 50px;
             color: chartreuse;
             position: absolute;
             top: 70%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             opacity: 0;
             transition-duration: 0.5s;
         }
-        .song:hover .bi-play-circle-fill{
+
+        .song:hover .bi-play-circle-fill {
             width: 100px;
             height: 100px;
             opacity: 1;
             top: 50%;
         }
 
-        .song:hover .song-shawdow{
+        .song:hover .song-shawdow {
             opacity: 0.1;
             z-index: 1;
 
         }
-        .song-shawdow{
+
+        .song-shawdow {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -295,12 +307,14 @@
             border-radius: 10px;
             z-index: 1;
         }
-        img {
+
+        .song img {
             border-radius: 10px;
-            width: auto;
-            height: 141px;
+            width: 80%;
+            height: 50%;
             margin-top: 20px;
         }
+
         .listSong {
             position: relative;
             z-index: 1;
@@ -332,6 +346,7 @@
         </div>
         <div class="my-taskbar">
             <ul class="login">
+                <li><a href="band?action=show">Band</a></li>
                 <li><a href="singer?action=show">Singer</a></li>
                 <li><a href="song?action=create">Song</a></li>
                 <li><a href="category?action=create">Category</a></li>
@@ -351,8 +366,8 @@
             <div class="listSong" cellpadding="5" cellspacing="5">
                 <h2>Top HIT</h2>
                 <c:if test="${currentPage != 1}">
-                <a href="song?page=${currentPage - 1}">Previous</a>
-            </c:if>
+                    <a href="song?page=${currentPage - 1}">Previous</a>
+                </c:if>
                 <c:forEach begin="1" end="${noOfPages}" var="i">
                     <c:choose>
                         <c:when test="${currentPage eq i}">
@@ -369,20 +384,17 @@
                 </c:if></div>
             <div class="music" cellpadding="5" cellspacing="5">
                 <c:forEach var="st" items='${requestScope["song"]}'>
-                    <a style="display: inline-block ; position: absolute;z-index: 10"  href="song?action=playsong&id=${st.id}">
-                    <div class="song" style="width: 186px; height: 276px">
-
-                    <img class="img-song" src="${st.img}">
-                    <p></p>
-                    <p>
-                        ${st.name}
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-
-                    </div>
+                    <a style="z-index: 10" href="song?action=playsong&id=${st.id}">
+                        <div class="song" style="width: 186px; height: 276px">
+                            <img class="img-song" src="${st.img}">
+                            <p></p>
+                            <p>
+                                    ${st.name}
+                            </p>
+                            <p style="color: aliceblue">MONO, Onionn</p>
+                            <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
+                            <div class="song-shawdow"></div>
+                        </div>
                     </a>
                 </c:forEach>
             </div>
