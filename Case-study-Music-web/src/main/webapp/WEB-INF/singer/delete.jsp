@@ -22,6 +22,6 @@
     <p>ARE YOU SURE DELETE?</p>
     <button>YES</button>
 </form>
-<a href="#">NO and Back Menu</a>
+<a href="/">NO and Back Menu</a>
 </body>
 </html>

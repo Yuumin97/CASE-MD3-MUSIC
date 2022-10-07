@@ -54,42 +54,97 @@
 <html>
 <head>
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <style>
+        h1 {
+            text-align: center;
+            font-family: Georgia;
+            height: 80px;
+            box-shadow: white;
+            color: white;
+        }
+
+
+        body {
+            background-image: url("https://codetheweb.blog/assets/img/posts/css-advanced-background-images/cover.jpg");
+            background-size: cover;
+            width: 100%;
+            height: 100vh;
+            background-position: center
+        }
+    </style>
+
 </head>
 <body>
-<h1><%="FORM CREATE SINGER" %>
+
+<div><h1 style="text-shadow: -4px 1px 7px #151313; "> <%="FORM LIST SINGER" %>
 </h1>
-<br/>
-<a href="singer?action=create">Create Singer</a>
-<form method="post">
-    <input type="text" name="search">
-    <button type="submit">Search</button>
-</form>
-<table border="1" style="width: 100%">
-    <tr>
-        <th>STT</th>
-        <th>NAME</th>
-        <th>BIRTHDAY</th>
-        <th>GENDER</th>
-        <th>DELETE</th>
-        <th>EDIT</th>
-    </tr>
+</div>
 
-<c:forEach var="st" items='${requestScope["listSinger"]}'>
-    <tr>
-        <td><a href="singer?action=detail&id=${st.id}">${st.id}</a></td>
-        <td>${st.name}</td>
-        <td>${st.birthDay}</td>
-        <td>${st.gender}</td>
-        <td>
-            <a href="singer?action=edit&id=${st.id}">Edit</a>
-        </td>
-        <td>
-            <a href="singer?action=delete&id=${st.id}">Delete</a>
-        </td>
-    </tr>
-</c:forEach>
-</table>
+<%--<div>--%>
+<%--    <button  type="button"><a href="singer?action=create" style="color: black">Create Singer</a></button>--%>
+<%--    <form method="post">--%>
+<%--        <input type="text" placeholder="Type here..." name="search">--%>
+<%--        <button type="submit">Search</button>--%>
+<%--    </form>--%>
+<%--</div>--%>
 
 
+<div class="container">
+    <div class="row row-cols-6">
+        <table class="table " border="1px" width="80%">
+            <thead class="table-dark">
+
+            <form method="post">
+                <input type="text" placeholder="Type here..." name="search"><br>
+                <button type="submit">Search</button>
+            </form>
+
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Name</th>
+                <th scope="col">Birthday</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+                <a href="singer?action=create" style="color: black"><button type="button">Create Singer</button></a>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="st" items='${requestScope["listSinger"]}'>
+                <tr>
+                    <td style="color: white">${st.id}</td>
+                    <td style="color: white">${st.name}</td>
+                    <td style="color: white">${st.birthDay}</td>
+                    <td style="color: white">${st.gender}</td>
+                    <td>
+                        <button class="btn btn-info"><a class="link-light" href="singer?action=edit&id=${st.id}"><i
+                                class="bi bi-pencil-square"></i></a></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger"><a class="link-light" href="singer?action=delete&id=${st.id}"><i
+                                class="bi bi-recycle"></i></a></button>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
 </body>
 </html>
