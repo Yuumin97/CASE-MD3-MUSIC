@@ -1,4 +1,4 @@
-package rikkei.academy.controller;
+package rikkei.academy.controller.singer;
 
 import rikkei.academy.model.singer.Band;
 import rikkei.academy.model.singer.Singer;

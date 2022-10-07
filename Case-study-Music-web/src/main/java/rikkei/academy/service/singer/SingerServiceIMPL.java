@@ -12,12 +12,12 @@ import java.util.List;
 
 public class SingerServiceIMPL implements ISingerService{
     private Connection connection = ConnectMySQL.getConnection();
-    private static final String CREATE_SINGER = "INSERT INTO singer(name,birthday,gender) VALUES (?,?,?)";
-    private static final String LIST_SINGER = "SELECT * FROM singer";
-    private static final String SINGER_BY_ID = "SELECT * FROM singer WHERE id=?;";
-    private static final String UPDATE_SINGER = "UPDATE singer SET name=?, brithday=?,gender=?, WHERE id=?;";
-    private static final String DELETE_SINGER = "DELETE FROM singer WHERE id=?";
-    private static final String SEARCH_BY_NAME_SINGER = "SELECT * FROM singer WHERE name LIKE ?";
+    private final String CREATE_SINGER = "INSERT INTO singer(name,birthday,gender) VALUES (?,?,?)";
+    private final String LIST_SINGER = "SELECT * FROM singer";
+    private final String SINGER_BY_ID = "SELECT * FROM singer WHERE id=?;";
+    private final String UPDATE_SINGER = "UPDATE singer SET name=?, brithday=?,gender=?, WHERE id=?;";
+    private final String DELETE_SINGER = "DELETE FROM singer WHERE id=?";
+    private final String SEARCH_BY_NAME_SINGER = "SELECT * FROM singer WHERE name LIKE ?";
     @Override
     public List<Singer> findByName(String nameSingerSearch) {
         List<Singer> singerListSearch = new ArrayList<>();
