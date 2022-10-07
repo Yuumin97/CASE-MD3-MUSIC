@@ -1,4 +1,4 @@
-package rikkei.academy.controller;
+package rikkei.academy.controller.singer;
 
 import rikkei.academy.model.singer.Singer;
 import rikkei.academy.service.singer.ISingerService;
@@ -10,7 +10,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet({"/", "/singer"})
+@WebServlet({"/singer"})
 public class SingerController extends HttpServlet {
     private ISingerService singerService = new SingerServiceIMPL();
     @Override

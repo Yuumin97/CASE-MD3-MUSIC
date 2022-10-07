@@ -38,11 +38,6 @@ public class CategoryServiceIMPL implements ICategoryService{
     }
 
     @Override
-    public void update(Category category) throws SQLException {
-
-    }
-
-    @Override
     public List<Category> findAll() {
         List<Category> categoryList = new ArrayList<>();
         try {
