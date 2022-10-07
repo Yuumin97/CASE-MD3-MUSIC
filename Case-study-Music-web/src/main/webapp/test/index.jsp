@@ -297,8 +297,8 @@
         }
         img {
             border-radius: 10px;
-            width: 80%;
-            height: 50%;
+            width: auto;
+            height: 141px;
             margin-top: 20px;
         }
         .listSong {
@@ -316,7 +316,7 @@
         <div class="select">
             <div><i class="bi bi-house-door-fill"></i><a href="#ababab"> &ensp;Home</a></div>
             <div><i class="bi bi-search"></i>&ensp;<a href="#aaaaa">Search</a></div>
-            <div><i class="bi bi-music-note-list"></i><a href="#aaaa">&ensp; Your Library</a></div>
+            <div><i class="bi bi-music-note-list"></i><a href="song?action=playsong">&ensp; Your Library</a></div>
         </div>
         <div class="my-menu">
             <div><i class="bi bi-file-plus-fill"></i><a href="#aaa">&ensp; Create Playlist</a></div>
@@ -369,7 +369,9 @@
                 </c:if></div>
             <div class="music" cellpadding="5" cellspacing="5">
                 <c:forEach var="st" items='${requestScope["song"]}'>
-                <div class="song" style="width: 186px; height: 276px">
+                    <a style="display: inline-block ; position: absolute;z-index: 10"  href="song?action=playsong&id=${st.id}">
+                    <div class="song" style="width: 186px; height: 276px">
+
                     <img class="img-song" src="${st.img}">
                     <p></p>
                     <p>
@@ -379,7 +381,9 @@
 
                     <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
                     <div class="song-shawdow"></div>
-                </div>
+
+                    </div>
+                    </a>
                 </c:forEach>
             </div>
 

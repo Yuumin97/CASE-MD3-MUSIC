@@ -30,7 +30,10 @@ public class SongController extends HttpServlet {
             case "create":
                 showCreateSong(request, response);
                  break;
-            default:
+            case "playsong":
+                actionSong(request, response);
+                break;
+                default:
                 showSongList(request, response);
                 break;
 
@@ -93,5 +96,12 @@ public class SongController extends HttpServlet {
         request.setAttribute("currentPage", page);
         RequestDispatcher view = request.getRequestDispatcher("test/index.jsp");
         view.forward(request, response);
+    }
+    public void actionSong(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Song song = songService.findById(id);
+        request.setAttribute("song", song);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/song/playSong.jsp");
+        dispatcher.forward(request, response);
     }
 }

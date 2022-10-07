@@ -59,7 +59,8 @@ public class SongServiceIMPL implements ISongService {
                 String name = resultSet.getString("name");
                 int listen = resultSet.getInt("listen");
                 String img = resultSet.getString("img");
-                Song song = new Song(id,name,listen,img);
+                String audio = resultSet.getString("audio");
+                Song song = new Song(id,name,listen,img, audio);
                 songListSearch.add(song);
             }
         } catch (SQLException e) {
@@ -100,7 +101,8 @@ public class SongServiceIMPL implements ISongService {
                 String name = resultSet.getString("name");
                 int listen = resultSet.getInt("listen");
                 String img = resultSet.getString("img");
-                song = new Song(id, name, listen,img);
+                String audio = resultSet.getString("audio");
+                song = new Song(id, name, listen,img, audio);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
