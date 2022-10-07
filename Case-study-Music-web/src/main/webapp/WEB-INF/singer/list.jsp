@@ -69,15 +69,14 @@
     <style>
         h1 {
             text-align: center;
-            font-family: Georgia;
+            font-family: "Lucida Console";
             height: 80px;
-            box-shadow: white;
-            color: white;
+            margin: 50px;
         }
 
 
         body {
-            background-image: url("https://codetheweb.blog/assets/img/posts/css-advanced-background-images/cover.jpg");
+            background-image: url("https://i.pinimg.com/originals/77/d6/19/77d61929a1abdc7989fa4fdfb6e696c3.jpg");
             background-size: cover;
             width: 100%;
             height: 100vh;
@@ -88,9 +87,6 @@
 </head>
 <body>
 
-<div><h1 style="text-shadow: -4px 1px 7px #151313; "><%="FORM LIST SINGER" %>
-</h1>
-</div>
 
 <%--<div>--%>
 <%--    <button  type="button"><a href="singer?action=create" style="color: black">Create Singer</a></button>--%>
@@ -100,26 +96,22 @@
 <%--    </form>--%>
 <%--</div>--%>
 
+<div><h1 style="text-shadow: -4px 5px 10px #696767; "><%="FORM LIST SINGER" %>
+</h1>
+</div>
 
 <div class="container">
     <div class="row row-cols-6">
         <table class="table " border="1px" width="80%">
             <thead class="table-dark">
             <form method="post">
-                <input type="text" placeholder="Type here..." name="search"><br>
-                <button type="submit">Search</button>
+                <%--                <input type="text" placeholder="Type here..." name="search"><br>--%>
+                <div class="input-group mb-3">
+                    <input name="search" type="text" class="form-control" placeholder="Type here..."
+                           aria-label="Username" aria-describedby="basic-addon1">
+                    <button type="submit" class="btn btn-outline-info">Search</button>
+                </div>
             </form>
-
-            <tr>
-                    <a href="singer?action=create" style="color: black">
-                        <button type="button">Create Singer</button>
-                    </a>
-            </tr>
-            <tr>
-                <a href="singer?action=show" style="color:black;">
-                    <button type="button">Back to ListSinger</button>
-                </a>
-            </tr>
 
 
             <tr>
@@ -136,29 +128,36 @@
             <tbody>
             <c:forEach var="st" items='${requestScope["listSinger"]}'>
                 <tr>
-                    <td style="color: white">${st.id}</td>
-                    <td style="color: white">${st.name}</td>
-                    <td style="color: white">${st.birthDay}</td>
-                    <td style="color: white">${st.gender}</td>
+                    <td>${st.id}</td>
+                    <td>${st.name}</td>
+                    <td>${st.birthDay}</td>
+                    <td>${st.gender}</td>
 
                     <td>
-                        <button class="btn btn-info"><a class="link-light" href="singer?action=edit&id=${st.id}"><i
+                        <button style="border-radius: 40%" class="btn btn-info"><a class="link-light"
+                                                                                   href="singer?action=edit&id=${st.id}"><i
                                 class="bi bi-pencil-square"></i></a></button>
                     </td>
                     <td>
-                        <button class="btn btn-danger"><a class="link-light" href="singer?action=delete&id=${st.id}"><i
+                        <button style="border-radius: 40%" class="btn btn-danger"><a class="link-light"
+                                                                                     href="singer?action=delete&id=${st.id}"><i
                                 class="bi bi-recycle"></i></a></button>
                     </td>
                 </tr>
             </c:forEach>
 
+
             </tbody>
 
         </table>
+        <div>
+            <a class="btn btn-outline-info" href="singer?action=create" role="button">Create Singer</a>
+
+        </div>
+        <a class="btn btn-outline-danger" href="singer?action=show" role="button">Back to List Singer</a>
+
 
     </div>
-
-
 </div>
 </body>
 </html>
