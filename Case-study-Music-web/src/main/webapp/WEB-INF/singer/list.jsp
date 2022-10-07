@@ -88,7 +88,7 @@
 </head>
 <body>
 
-<div><h1 style="text-shadow: -4px 1px 7px #151313; "> <%="FORM LIST SINGER" %>
+<div><h1 style="text-shadow: -4px 1px 7px #151313; "><%="FORM LIST SINGER" %>
 </h1>
 </div>
 
@@ -105,11 +105,22 @@
     <div class="row row-cols-6">
         <table class="table " border="1px" width="80%">
             <thead class="table-dark">
-
             <form method="post">
                 <input type="text" placeholder="Type here..." name="search"><br>
                 <button type="submit">Search</button>
             </form>
+
+            <tr>
+                    <a href="singer?action=create" style="color: black">
+                        <button type="button">Create Singer</button>
+                    </a>
+            </tr>
+            <tr>
+                <a href="singer?action=show" style="color:black;">
+                    <button type="button">Back to ListSinger</button>
+                </a>
+            </tr>
+
 
             <tr>
                 <th scope="col">STT</th>
@@ -118,9 +129,10 @@
                 <th scope="col">Gender</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
-                <a href="singer?action=create" style="color: black"><button type="button">Create Singer</button></a>
+
             </tr>
             </thead>
+
             <tbody>
             <c:forEach var="st" items='${requestScope["listSinger"]}'>
                 <tr>
@@ -128,6 +140,7 @@
                     <td style="color: white">${st.name}</td>
                     <td style="color: white">${st.birthDay}</td>
                     <td style="color: white">${st.gender}</td>
+
                     <td>
                         <button class="btn btn-info"><a class="link-light" href="singer?action=edit&id=${st.id}"><i
                                 class="bi bi-pencil-square"></i></a></button>
@@ -138,6 +151,7 @@
                     </td>
                 </tr>
             </c:forEach>
+
             </tbody>
 
         </table>
