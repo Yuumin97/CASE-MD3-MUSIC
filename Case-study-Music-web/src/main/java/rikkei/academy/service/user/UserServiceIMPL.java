@@ -2,19 +2,18 @@ package rikkei.academy.service.user;
 
 import rikkei.academy.config.ConnectMySQL;
 import rikkei.academy.model.account.Role;
+import rikkei.academy.model.account.RoleName;
 import rikkei.academy.model.account.User;
 import rikkei.academy.service.role.IRoleService;
 import rikkei.academy.service.role.RoleServiceIMPL;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class UserServiceIMPL implements IUserService {
     private IRoleService roleService = new RoleServiceIMPL();
     private Connection connection = ConnectMySQL.getConnection();
+    private final String LIST_USER = "SELECT * FROM users;";
     private final String CREATE_USER = "INSERT INTO users(name,username,email,password) values (?,?,?,?);";
     private final String INSERT_ROLE_ID_USER_ID = "INSERT INTO user_role(user_id,role_id) values (?,?);";
     private final String FIND_ALL_USERNAME = "SELECT username FROM users";
@@ -24,7 +23,8 @@ public class UserServiceIMPL implements IUserService {
     private final String FIND_BY_USERNAME_PASSWORD = "SELECT * FROM users WHERE username=?AND password=?";
     private final String CHANGE_AVATAR = "UPDATE users SET avatar = ? WHERE id=?;";
     private final String UPDATE_USER = "UPDATE users SET name=?, email=?, password = ?WHERE id=?;";
-
+    private final String DELETE_USER = "DELETE FROM users WHERE id=?, username=?;";
+    private final String CHANGE_ROLE = "UPDATE user_role SET role_id =? WHERE id =?; ";
     @Override
     public void save(User user) {
         try {
@@ -74,6 +74,9 @@ public class UserServiceIMPL implements IUserService {
             throw new RuntimeException(e);
         }
     }
+
+
+
 
     @Override
     public boolean existedByUsername(String username) {
@@ -147,6 +150,40 @@ public class UserServiceIMPL implements IUserService {
         }
 
     }
+    @Override
+    public void deleteById(int id) {
+        try {
+            PreparedStatement preparedStatement1 = connection.prepareStatement(DELETE_USER);
+            preparedStatement1.setInt(1,id);
+            preparedStatement1.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<User> userList = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(LIST_USER);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                Set<Role> role = (Set<Role>) roleService.findById(id);
+                List<Role> roleList = new ArrayList<>(role);
+                String avatar = resultSet.getString("avatar");
+                userList.add(new User(id,name,username,email,password,roleList,avatar));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userList;
+    }
+
 
     @Override
     public User findByUsernameAndPassword(String username, String password) {

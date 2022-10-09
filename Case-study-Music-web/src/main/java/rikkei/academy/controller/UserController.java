@@ -11,6 +11,7 @@ import rikkei.academy.service.user.UserServiceIMPL;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -50,8 +51,17 @@ public class UserController extends HttpServlet {
                 showFormChangePass(request, response);
                 break;
             case "change_profile":
-                showFormChangeProfile(request,response);
+                showFormChangeProfile(request, response);
                 break;
+            case "delete_user":
+                showFormDelete(request, response);
+                break;
+            case "change_role":
+                showFormChangeRole(request,response);
+                break;
+            default:
+                showListUser(request,response);
+
         }
     }
 
@@ -81,12 +91,15 @@ public class UserController extends HttpServlet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case "change_profile" :
+            case "change_profile":
                 try {
-                    actionChangeProfile(request,response);
+                    actionChangeProfile(request, response);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+                break;
+            case "delete_user":
+                actionDelete(request, response);
                 break;
 
         }
@@ -95,6 +108,12 @@ public class UserController extends HttpServlet {
     public void destroy() {
     }
 
+    public void showListUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<User> userList = userService.findAll();
+        request.setAttribute("list_user",userList);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/admin/list_user.jsp");
+        requestDispatcher.forward(request,response);
+    }
     public void showFormRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
         dispatcher.forward(request, response);
@@ -168,14 +187,9 @@ public class UserController extends HttpServlet {
 
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+
             System.out.println("get userlogin ---> " + session.getAttribute("user"));
             pageJSP = "WEB-INF/profile/profile.jsp";
-//            Cookie cookieName = new Cookie("username",username);
-//            Cookie cookiePass = new Cookie("password",password);
-////            cookieName.setMaxAge(10000);
-////            cookiePass.setMaxAge(10000);
-////            response.addCookie(cookieName);
-////            response.addCookie(cookiePass);
 
         } else {
 
@@ -241,18 +255,22 @@ public class UserController extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/form-login/change_pass.jsp").forward(request, response);
             return;
         }
+        if (newPass.matches("[A-Z][a-zA-Z]{1,10}")) {
+            userLogin.setPassword(newPass);
+            userService.update(userLogin);
+            request.getSession().setAttribute("user", userLogin);
+            request.setAttribute("success", "Change password success");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
 
-        userLogin.setPassword(newPass);
-        userService.update( userLogin);
-        request.getSession().setAttribute("user", userLogin);
 
-        request.setAttribute("success", "Change password success");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
+
     public void showFormChangeProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/form-login/change_profile.jsp");
         requestDispatcher.forward(request, response);
     }
+
     public void actionChangeProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         User userLogin = (User) request.getSession().getAttribute("user");
 
@@ -277,6 +295,29 @@ public class UserController extends HttpServlet {
 
         request.setAttribute("success", "Change profile success");
         request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+
+    public void showFormDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        int id = Integer.parseInt(request.getParameter("id"));
+//        request.setAttribute("id",id);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/admin/delete_user.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
+    public void actionDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String username = request.getParameter("username");
+        userService.deleteById(id);
+        request.setAttribute("message", "Delete success!");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/admin/delete_user.jsp");
+        dispatcher.forward(request, response);
+    }
+    public void showFormChangeRole(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/admin/change_role.jsp");
+        requestDispatcher.forward(request, response);
+    }
+    public void actionChangeRole(HttpServletRequest request, HttpServletResponse response){
 
     }
 

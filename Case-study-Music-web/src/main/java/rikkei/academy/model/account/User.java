@@ -3,6 +3,7 @@ package rikkei.academy.model.account;
 import rikkei.academy.model.account.Role;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class User {
@@ -40,6 +41,17 @@ public class User {
         this.name = name;
         this.roles = roles;
     }
+
+    public User(int id, String name, String username, String email, String password, List<Role> roleList, String avatar) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = (Set<Role>) roleList;
+        this.avatar = avatar;
+    }
+
 
     public int getId() {
         return id;

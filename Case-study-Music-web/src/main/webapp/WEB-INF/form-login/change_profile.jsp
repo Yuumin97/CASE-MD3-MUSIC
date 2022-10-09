@@ -26,5 +26,8 @@
     <input type="text" name="newEmail"><br>
     <button>Submit</button>
 </form>
+<c:if test="${user.name!=null}">
+    <a class="nav-link " href="users?action=profile" ><button type="button">Back</button> </a>
+</c:if>
 </body>
 </html>

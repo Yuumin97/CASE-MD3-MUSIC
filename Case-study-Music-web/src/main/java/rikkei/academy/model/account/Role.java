@@ -1,6 +1,8 @@
 package rikkei.academy.model.account;
 
-public class Role {
+import java.util.Set;
+
+public class Role  {
     private int id;
     private RoleName name;
 
