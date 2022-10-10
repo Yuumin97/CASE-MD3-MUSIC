@@ -1,4 +1,4 @@
-package rikkei.academy.controller;
+package rikkei.academy.controller.account;
 
 import rikkei.academy.model.account.Role;
 import rikkei.academy.model.account.RoleName;

@@ -11,43 +11,20 @@ To change this template use File | Settings | File Templates.
     <title>Title</title>
 </head>
 <body>
-
-<form method="post">
     <progress value="0" max="100" id="uploader">0%</progress>
     <input type="file" value="upload" accept=".jpg" id="fileButton">
     <input type="text" name="avatar" id="avatar" style="display: none">
     <div id="imgDiv"></div>
-    <button type="submit">Upload</button>
-</form>
 <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
-<%--<script>--%>
-
-<%--    //BE SURE TO PROTECT EVERYTHING IN THE CONFIG--%>
-<%--    //DON'T COMMIT IT!!!--%>
-
-<%--    // Initialize Firebase--%>
-<%--    const firebaseConfig = {--%>
-<%--        apiKey: "AIzaSyAHbXIdiO5i-nOweX-szmiNn4JSyrOjDi4",--%>
-<%--        authDomain: "chinhbeo-18d3b.firebaseapp.com",--%>
-<%--        databaseURL: "https://chinhbeo-18d3b.firebaseio.com",--%>
-<%--        projectId: "chinhbeo-18d3b",--%>
-<%--        storageBucket: "chinhbeo-18d3b.appspot.com",--%>
-<%--        messagingSenderId: "197467443558",--%>
-<%--        appId: "1:197467443558:web:7cccdbe875f827eb84b8a7",--%>
-<%--        measurementId: "G-D375CXH5LG"--%>
-<%--    };--%>
-<%--    firebase.initializeApp(firebaseConfig);--%>
-<%--</script>--%>
-
 <script type="text/javascript">
     const firebaseConfig = {
-        apiKey: "AIzaSyDJTyYMMX4ZP_IsyBbtinW0CILGhCx6RfY",
-        authDomain: "phulinh-fa18e.firebaseapp.com",
-        projectId: "phulinh-fa18e",
-        storageBucket: "phulinh-fa18e.appspot.com",
-        messagingSenderId: "440659211067",
-        appId: "1:440659211067:web:dd3254132ed6a245937d1e",
-        measurementId: "G-M2GKGHPS9E"
+        apiKey: "AIzaSyCcgbDWgLu3CRA_JgQoOc45okxWJS-w6ds",
+        authDomain: "ducmin-530bc.firebaseapp.com",
+        projectId: "ducmin-530bc",
+        storageBucket: "ducmin-530bc.appspot.com",
+        messagingSenderId: "545765053033",
+        appId: "1:545765053033:web:f0e4707dfb6549953308f8",
+        measurementId: "G-PGFWSP0QMH"
     };
     firebase.initializeApp(firebaseConfig);
 
@@ -69,20 +46,11 @@ To change this template use File | Settings | File Templates.
 
         // get file
         var file = e.target.files[0];
-
-        // create a storage ref
-        <%--var storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);--%>
         const storageRef = firebase.storage().ref(file.name);
         // upload file
         var uploadTask = storageRef.put(file);
-
-        // The part below is largely copy-pasted from the 'Full Example' section from
-        // https://firebase.google.com/docs/storage/web/upload-files
-
-        // update progress bar
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
             function (snapshot) {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 uploader.value = progress;
                 console.log('Upload is ' + progress + '% done');
@@ -96,8 +64,6 @@ To change this template use File | Settings | File Templates.
                 }
             }, function (error) {
 
-                // A full list of error codes is available at
-                // https://firebase.google.com/docs/storage/web/handle-errors
                 switch (error.code) {
                     case 'storage/unauthorized':
                         // User doesn't have permission to access the object
@@ -126,13 +92,7 @@ To change this template use File | Settings | File Templates.
                 divLocation.append(imgElement);
                 document.getElementById('avatar').value = downloadURL;
             });
-
     });
-
-    function resultImage(){
-        console.log('image resulte -->', image)
-        return image;
-    }
 </script>
 </body>
 </html>
