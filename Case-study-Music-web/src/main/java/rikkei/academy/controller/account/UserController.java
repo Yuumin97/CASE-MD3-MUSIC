@@ -3,8 +3,12 @@ package rikkei.academy.controller.account;
 import rikkei.academy.model.account.Role;
 import rikkei.academy.model.account.RoleName;
 import rikkei.academy.model.account.User;
+import rikkei.academy.model.like.Like;
+import rikkei.academy.model.song.Song;
 import rikkei.academy.service.role.IRoleService;
 import rikkei.academy.service.role.RoleServiceIMPL;
+import rikkei.academy.service.song.ISongService;
+import rikkei.academy.service.song.SongServiceIMPL;
 import rikkei.academy.service.user.IUserService;
 import rikkei.academy.service.user.UserServiceIMPL;
 
@@ -20,7 +24,7 @@ import javax.servlet.annotation.*;
 
 @WebServlet(value = "/users")
 public class UserController extends HttpServlet {
-
+    private ISongService songService = new SongServiceIMPL();
     private IRoleService roleService = new RoleServiceIMPL();
     private IUserService userService = new UserServiceIMPL();
 
@@ -110,6 +114,7 @@ public class UserController extends HttpServlet {
 
     public void showListUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> userList = userService.findAll();
+        System.out.println(userList);
         request.setAttribute("list_user",userList);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/admin/list_user.jsp");
         requestDispatcher.forward(request,response);
@@ -140,9 +145,20 @@ public class UserController extends HttpServlet {
             }
         });
         System.out.println("roles set ---> " + roles);
-
         String name = request.getParameter("name");
+        if (name=="" ){
+            request.setAttribute("message", "Please enter the name");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
+            dispatcher.forward(request, response);
+        }
+
+
         String username = request.getParameter("username");
+        if (username=="" ){
+            request.setAttribute("message", "Please enter the username");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
+            dispatcher.forward(request, response);
+        }
         if (userService.existedByUsername(username)) {
             request.setAttribute("message", "The username existed! Please try again!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
@@ -150,6 +166,11 @@ public class UserController extends HttpServlet {
 //            return;
         }
         String email = request.getParameter("email");
+        if (email=="" ){
+            request.setAttribute("message", "Please enter the email");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
+            dispatcher.forward(request, response);
+        }
         if (userService.existedByEmail(email)) {
             request.setAttribute("message", "The email existed! Please try again!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
@@ -157,7 +178,17 @@ public class UserController extends HttpServlet {
 //            return;
         }
         String password = request.getParameter("password");
+        if (password=="" ){
+            request.setAttribute("message", "Please enter the password");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
+            dispatcher.forward(request, response);
+        }
         String confirm_pass = request.getParameter("repeat_pass");
+        if (confirm_pass=="" ){
+            request.setAttribute("message", "Please enter the repeat password");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
+            dispatcher.forward(request, response);
+        }
         if (!password.equals(confirm_pass)) {
             request.setAttribute("message", "The password do not match!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
@@ -167,7 +198,7 @@ public class UserController extends HttpServlet {
         User user = new User(name, username, email, password, roles);
         userService.save(user);
         request.setAttribute("success", "Create user success!!");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/register.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/login.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -175,6 +206,7 @@ public class UserController extends HttpServlet {
     public void showFormLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/form-login/login.jsp");
         dispatcher.forward(request, response);
+
     }
 
     public void actionLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -189,12 +221,24 @@ public class UserController extends HttpServlet {
             session.setAttribute("user", user);
 
             System.out.println("get userlogin ---> " + session.getAttribute("user"));
-            pageJSP = "WEB-INF/profile/profile.jsp";
+            pageJSP = "test/index.jsp";
 
         } else {
 
             pageJSP = "WEB-INF/form-login/login.jsp";
         }
+        int page = 1;
+        int recordsPerPage = 5;
+        if(request.getParameter("page") != null)
+            page = Integer.parseInt(request.getParameter("page"));
+        SongServiceIMPL serviceIMPL = new SongServiceIMPL();
+        List<Song> list = serviceIMPL.findAllSongs((page-1)*recordsPerPage,
+                recordsPerPage);
+        int noOfRecords = serviceIMPL.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("song", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page);
         request.setAttribute("message", "Wrong username or password");
         RequestDispatcher dispatcher = request.getRequestDispatcher(pageJSP);
         dispatcher.forward(request, response);
@@ -212,7 +256,7 @@ public class UserController extends HttpServlet {
 
     //CHANGE AVATAR
     public void showUpLoadAvatar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/upload/upload_avatar.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/upload/upload_avatar_user.jsp");
         requestDispatcher.forward(request, response);
     }
 
@@ -278,13 +322,13 @@ public class UserController extends HttpServlet {
         String newName = request.getParameter("newName");
         String oldEmail = request.getParameter("oldEmail");
         String newEmail = request.getParameter("newEmail");
-        if (oldName.equals(newName)) {
-            request.setAttribute("message", "New name must be different");
+        if (oldName.equals(newName) || !oldName.equals("name") || oldName=="") {
+            request.setAttribute("message", "New name must be different or Old password is not correct  ");
             request.getRequestDispatcher("WEB-INF/form-login/change_profile.jsp").forward(request, response);
             return;
         }
-        if (newEmail.equals(oldEmail)) {
-            request.setAttribute("message", "New email must be different");
+        if (newEmail.equals(oldEmail) || !oldEmail.equals("name") || oldEmail =="") {
+            request.setAttribute("message", "New email must be different or Old email is not correct");
             request.getRequestDispatcher("WEB-INF/form-login/change_profile.jsp").forward(request, response);
             return;
         }

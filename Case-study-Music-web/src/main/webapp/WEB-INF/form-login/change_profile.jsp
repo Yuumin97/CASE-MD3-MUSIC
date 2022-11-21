@@ -10,8 +10,20 @@
 <html>
 <head>
     <title>Title</title>
+    <style>
+        body {
+            background-image: url("https://firebasestorage.googleapis.com/v0/b/phulinh-fa18e.appspot.com/o/hinh-nen-dep-cho-laptop-1366x768-13.jpg?alt=media&token=ff79003a-93d1-4c47-b809-a6f6e8dabeba");
+            background-size: cover;
+            width: 100%;
+            height: 100vh;
+            background-position: center;
+
+
+        }
+    </style>
 </head>
 <body>
+<div style="text-align: center; color: orangered">
 <c:if test="${requestScope['message'] != null}">
     <p style="color: red">${requestScope['message']}</p>
 </c:if>
@@ -29,5 +41,6 @@
 <c:if test="${user.name!=null}">
     <a class="nav-link " href="users?action=profile" ><button type="button">Back</button> </a>
 </c:if>
+</div>
 </body>
 </html>

@@ -15,6 +15,16 @@ public class Song {
     private int listen;
     private String img;
     private String audio;
+    private int countLike;
+
+    public int getCountLike() {
+        return countLike;
+    }
+
+    public void setCountLike(int countLike) {
+        this.countLike = countLike;
+    }
+
     private Set<Category> categories = new HashSet<>();
 
     private List<Singer> singerList = new ArrayList<>();

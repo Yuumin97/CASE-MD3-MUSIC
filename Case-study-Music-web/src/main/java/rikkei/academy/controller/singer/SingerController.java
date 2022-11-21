@@ -1,8 +1,10 @@
 package rikkei.academy.controller.singer;
 
 import rikkei.academy.model.singer.Singer;
+import rikkei.academy.model.song.Song;
 import rikkei.academy.service.singer.ISingerService;
 import rikkei.academy.service.singer.SingerServiceIMPL;
+import rikkei.academy.service.song.SongServiceIMPL;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -12,7 +14,11 @@ import java.util.List;
 
 @WebServlet({"/singer"})
 public class SingerController extends HttpServlet {
+    public SingerController(){
+        super();
+    }
     private ISingerService singerService = new SingerServiceIMPL();
+    private static final long serialVersionUID = 1L;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -34,10 +40,9 @@ public class SingerController extends HttpServlet {
             case "detail":
                 formDetailSinger(request,response);
                 break;
-            case "show":
+            case "list":
                 showListSinger(request, response);
                 break;
-
         }
     }
 
@@ -85,7 +90,8 @@ public class SingerController extends HttpServlet {
         String name = request.getParameter("name");
         int birthday = Integer.parseInt(request.getParameter("birthday"));
         String gender = request.getParameter("gender");
-        Singer singer = new Singer(birthday,name,gender);
+        String img = request.getParameter("avatar");
+        Singer singer = new Singer(birthday,name,gender,img);
         singerService.save(singer);
         request.setAttribute("message", "Create Singer success !!!");
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/create.jsp");
@@ -125,6 +131,7 @@ public class SingerController extends HttpServlet {
     private void formDetailSinger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Singer singer = singerService.findById(id);
+
         request.setAttribute("singer",singer);
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/singer/detail.jsp");
         dispatcher.forward(request, response);
@@ -137,7 +144,7 @@ public class SingerController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Singer singer = singerService.findById(id);
         String name = request.getParameter("name");
-        int birthday = Integer.parseInt(request.getParameter("birthday"));
+        int birthday = Integer.parseInt(request.getParameter("birthDay"));
         String gender = request.getParameter("gender");
         singer.setName(name);
         singer.setBirthDay(birthday);

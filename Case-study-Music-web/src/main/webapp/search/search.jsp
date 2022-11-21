@@ -1,4 +1,3 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%--<%@ page language="java" contentType="text/html; charset=ISO-8859-1"--%>
@@ -329,7 +328,7 @@
     <div class="menu1">
         <div class="logo"><img src="image/logo.jpg"></div>
         <div class="select">
-            <div><i class="bi bi-house-door-fill"></i><a href="/"> &ensp;Home</a></div>
+            <div><i class="bi bi-house-door-fill"></i><a href="#ababab"> &ensp;Home</a></div>
             <div><i class="bi bi-search"></i>&ensp;<a href="#aaaaa">Search</a></div>
             <div><i class="bi bi-music-note-list"></i><a href="song?action=playsong">&ensp; Your Library</a></div>
         </div>
@@ -350,23 +349,11 @@
         </div>
         <div class="my-taskbar">
             <ul class="login">
-                <li><c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
-                    <a href="band?action=create">Song</a>
-                </c:if>
-                    <a href="band?action=show">Band</a></li>
-                <li><c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
-                    <a href="singer?action=create">Song</a>
-                </c:if>
-                    <a href="singer?action=list">Singer</a></li>
-                <li> <c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
-                    <a href="song?action=create">Song</a>
-                </c:if>
-                    <a href="song?action=list">Song</a></li>
+                <li><a href="band?action=show">Band</a></li>
+                <li><a href="singer?action=show">Singer</a></li>
+                <li><a href="song?action=create">Song</a></li>
                 <li>
-                    <c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
-                        <a href="category?action=create">Category</a>
-                    </c:if>
-                    <a href="category?action=show">Category</a>
+                    <a href="category?action=create">Category</a>
                 </li>
                 <li style="font-size: 25px; color: white">|</li>
                 <li><c:if test="${sessionScope['user']==null}">
@@ -387,55 +374,24 @@
         </div>
     </div>
     <div></div>
-    <div class="grid-row" style="color: #f4f5f7; text-align: center;justify-content: center;
-            align-items: center; z-index: 1">
-        <h1>FORM CREATE SONG</h1>
-        <c:if test='${requestScope["message"]!=null}'>
-            <span style="color: blue">${requestScope["message"]}</span>
-        </c:if>
-        <form  method="post">
-            <label>NAME</label><br>
-            <input type="text" name="name"><br>
-            <label>LISTEN</label>
-            <br>
-            <input type="text" name="listen">
-            <br>
-            <jsp:include page='../upload/upload_audio.jsp'>
-                <jsp:param name="articleId" value=""/>
-            </jsp:include>
-
-            <br>
-            <select id="category" name="category">
-                <c:forEach items='${requestScope["category"]}' var="st">
-                    <option value="${st.id}"> ${st.name}</option>
-                </c:forEach>
-            </select>
-            <select multiple id="singer" name="singer">
-                <c:forEach items='${requestScope["singer"]}' var="sg">
-                    <option value="${sg.id}"> ${sg.name}</option>
-                </c:forEach>
-            </select>
-            <select multiple id="band" name="band">
-                <c:forEach items='${requestScope["band"]}' var="bd">
-                    <option value="${bd.id}">${bd.name}</option>
-                </c:forEach>
-            </select>
-            <button type="submit">Create</button>
-            <a href="/song">Back Menu</a>
+    <div class="grid-row">
+        <form action="">
+        <input type="text">
+        <button> Search </button>
         </form>
     </div>
 </div>
 </div>
 <c:if test="${sessionScope['user']==null}">
-    <div class="notification">
-        <div class="my-text">
-            <p>PREVIEW OF SPOTIFY</p><br>
-            <p>Sign up to get unlimited songs and podcasts with occasional ads. No credit card needed</p>
-            <div class="button">
-                <button class="signup" href="#aabbb"> SIGN UP FREE</button>
-            </div>
+<div class="notification">
+    <div class="my-text">
+        <p>PREVIEW OF SPOTIFY</p><br>
+        <p>Sign up to get unlimited songs and podcasts with occasional ads. No credit card needed</p>
+        <div class="button">
+            <button class="signup" href="#aabbb"> SIGN UP FREE</button>
         </div>
     </div>
+</div>
 </c:if>
 <c:if test="${sessionScope['user']!=null}"><div></div></c:if>
 <h1 class="test">Test</h1>

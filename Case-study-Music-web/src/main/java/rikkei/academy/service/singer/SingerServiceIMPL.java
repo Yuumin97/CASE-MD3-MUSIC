@@ -2,20 +2,23 @@ package rikkei.academy.service.singer;
 
 import rikkei.academy.config.ConnectMySQL;
 import rikkei.academy.model.singer.Singer;
+import rikkei.academy.model.song.Song;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static rikkei.academy.config.ConnectMySQL.getConnection;
+
 public class SingerServiceIMPL implements ISingerService{
     private Connection connection = ConnectMySQL.getConnection();
-    private final String CREATE_SINGER = "INSERT INTO singer(name,birthday,gender) VALUES (?,?,?)";
+    Statement stmt;
+    private int noOfRecords;
+    private final String CREATE_SINGER = "INSERT INTO singer(name,birthday,gender,img) VALUES (?,?,?,?)";
     private final String LIST_SINGER = "SELECT * FROM singer";
     private final String SINGER_BY_ID = "SELECT * FROM singer WHERE id=?;";
-    private final String UPDATE_SINGER = "UPDATE singer SET name=?, brithday=?,gender=?, WHERE id=?;";
+    private final String DETAIL_BY_ID = "SELECT * FROM singer join songs_singer ss on singer.id = ss.idSinger join songs s on ss.idSong = s.id where s.id=?;";
+    private final String UPDATE_SINGER = "UPDATE singer SET name=?, birthDay=?,gender=? WHERE id=?;";
     private final String DELETE_SINGER = "DELETE FROM singer WHERE id=?";
     private final String SEARCH_BY_NAME_SINGER = "SELECT * FROM singer WHERE name LIKE ?";
     @Override
@@ -28,7 +31,7 @@ public class SingerServiceIMPL implements ISingerService{
             while (resultSet.next()){
 
                 int id = resultSet.getInt("id");
-                int birthday = resultSet.getInt("birthday");
+                int birthday = resultSet.getInt("birthDay");
                 String name = resultSet.getString("name");
                 String gender = resultSet.getString("gender");
 
@@ -51,7 +54,7 @@ public class SingerServiceIMPL implements ISingerService{
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                int birthday= resultSet.getInt("birthday");
+                int birthday= resultSet.getInt("birthDay");
                 String gender = resultSet.getString("gender");
                 Singer singer = new Singer(id, name, birthday,gender);
                 singerList.add(singer);
@@ -70,6 +73,7 @@ public class SingerServiceIMPL implements ISingerService{
                 preparedStatement.setString(1, singer.getName());
                 preparedStatement.setInt(2, singer.getBirthDay());
                 preparedStatement.setString(3, singer.getGender());
+                preparedStatement.setString(4,singer.getImg());
                 preparedStatement.executeUpdate();
             }else {
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SINGER);
@@ -114,5 +118,57 @@ public class SingerServiceIMPL implements ISingerService{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Singer> findAllSinger(int offset, int noOfRecords) {
+    String query = "select SQL_CALC_FOUND_ROWS * from singer limit "
+            + offset + ", " + noOfRecords;
+    List<Singer> listSinger = new ArrayList<>();
+    Singer singer = null;
+        try {
+        connection = getConnection();
+        stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            singer = new Singer();
+            singer.setId(rs.getInt("id"));
+            singer.setName(rs.getString("name"));
+            singer.setImg(rs.getString("img"));
+            listSinger.add(singer);
+        }
+        rs.close();
+        rs = stmt.executeQuery("SELECT FOUND_ROWS()");
+        if(rs.next())
+            this.noOfRecords = rs.getInt(1);
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally
+    {
+        try {
+            if(stmt != null)
+                stmt.close();
+            if(connection != null)
+                connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+        return listSinger;
+}
+
+    @Override
+    public Singer detailById(int id) {
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(DETAIL_BY_ID);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public int getNoOfRecords() {
+        return noOfRecords;
     }
 }

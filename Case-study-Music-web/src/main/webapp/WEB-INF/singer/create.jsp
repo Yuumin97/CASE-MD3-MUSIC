@@ -23,6 +23,9 @@
     <input type="text" name="birthday"><br>
     <label>GENDER</label><br>
     <input type="text" name="gender"><br>
+    <jsp:include page='../upload/upload_avatar.jsp'>
+        <jsp:param name="articleId" value=""/>
+    </jsp:include>
     <button>Create</button><br>
     <a href="/">Back Menu</a>
 </form>

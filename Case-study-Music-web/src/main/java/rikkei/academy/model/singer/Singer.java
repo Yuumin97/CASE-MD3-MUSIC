@@ -32,6 +32,13 @@ public class Singer {
         this.gender=gender;
     }
 
+    public Singer(int birthday, String name, String gender, String img) {
+        this.name = name;
+        this.birthDay = birthDay;
+        this.gender = gender;
+        this.img = img;
+    }
+
 
     public String getImg() {
         return img;

@@ -33,7 +33,7 @@
 </head>
 <body>
 <section class="vh-100">
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color: #84fab0">
         <div class="row">
             <div class="col-sm-6 text-black">
 
@@ -74,8 +74,8 @@
             </div>
             <div class="col-sm-6 px-0 d-none d-sm-block">
 
-                <img src="https://i.pinimg.com/originals/13/09/84/13098424a6e6e1006a8b9886e15e452c.png"
-                     alt="Login image" width="400vh" height="100%" style="" >
+                <img src="https://firebasestorage.googleapis.com/v0/b/phulinh-fa18e.appspot.com/o/1792336.jpg?alt=media&token=aa3456d5-df97-48d7-a2cc-2b1f408ea0a5"
+                     alt="Login image" width="100%" height="100%" style="" >
             </div>
         </div>
     </div>

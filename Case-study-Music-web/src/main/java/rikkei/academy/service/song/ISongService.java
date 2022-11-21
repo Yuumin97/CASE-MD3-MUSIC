@@ -13,4 +13,6 @@ public interface ISongService extends IGenericService<Song> {
     void deleteById(int id);
     List<Song> findAllSongs(int offset, int noOfRecords);
 
+    void listen(Song song);
+
 }

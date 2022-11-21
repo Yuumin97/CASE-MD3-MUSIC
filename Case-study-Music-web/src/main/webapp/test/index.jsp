@@ -70,13 +70,13 @@
 
         .navbar {
             display: grid;
-            grid-template-columns: 30% auto;
+            grid-template-columns: 30% 70%;
             width: 100%;
             background: rgba(0, 0, 0, 0.5);
             height: 64px;
             position: fixed;
             z-index: 10;
-            margin-left: 214px;
+            margin-left: 241px;
         }
 
         .notification {
@@ -99,7 +99,7 @@
         }
 
         .logo img {
-            width: 70%;
+            width: 100%;
         }
 
         .select {
@@ -320,13 +320,17 @@
             position: relative;
             z-index: 1;
         }
+        .listSinger{
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
 
 <div class="menu">
     <div class="menu1">
-        <div class="logo"><img src="img/logo.png"></div>
+        <div class="logo"><img src="image/logo.jpg"></div>
         <div class="select">
             <div><i class="bi bi-house-door-fill"></i><a href="#ababab"> &ensp;Home</a></div>
             <div><i class="bi bi-search"></i>&ensp;<a href="#aaaaa">Search</a></div>
@@ -338,27 +342,6 @@
         </div>
     </div>
     <div></div>
-<%--    <div class="navbar">--%>
-<%--        <div class="back">--%>
-<%--            <ul>--%>
-<%--                <li><a class="back" href="#back"><i class="bi bi-chevron-compact-left"></i></a></li>--%>
-<%--                <li><a class="back" href="#next"><i class="bi bi-chevron-compact-right"></i></a></li>--%>
-<%--            </ul>--%>
-<%--        </div>--%>
-<%--        <div class="my-taskbar">--%>
-<%--            <ul class="login">--%>
-<%--                <li><a href="band?action=show">Band</a></li>--%>
-<%--                <li><a href="singer?action=show">Singer</a></li>--%>
-<%--                <li><a href="song?action=create">Song</a></li>--%>
-<%--                <li><a href="category?action=create">Category</a></li>--%>
-<%--                <li style="font-size: 25px; color: white">|</li>--%>
-<%--                <li><a href="users?action=register">Sign up</a></li>--%>
-<%--                <li>--%>
-<%--                   <a href="users?action=login"> <button class="button-login" >LOG IN</button></a>--%>
-<%--                </li>--%>
-<%--            </ul>--%>
-<%--        </div>--%>
-<%--    </div>--%>
 </div>
 <div class="new">
     <div class="navbar">
@@ -370,14 +353,37 @@
         </div>
         <div class="my-taskbar">
             <ul class="login">
-                <li><a href="band?action=show">Band</a></li>
-                <li><a href="singer?action=show">Singer</a></li>
-                <li><a href="song?action=create">Song</a></li>
-                <li><a href="category?action=create">Category</a></li>
-                <li style="font-size: 25px; color: white">|</li>
-                <li><a href="users?action=register">Sign up</a></li>
+                <li><c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
+                    <a href="band?action=show">Band Manage</a>
+                </c:if>
+                <li><c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
+                    <a href="singer?action=create">Singer Manage</a>
+                </c:if>
+                    <a href="singer?action=list">Singer</a></li>
+                <li> <c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
+                    <a href="song?action=create">Song Manage</a>
+                </c:if>
+                    <a href="song?action=list">Song</a></li>
                 <li>
+                    <c:if test="${user.role.name == 'ADMIN' || user.role.name == 'PM'}">
+                    <a href="category?action=create">Category Manage</a>
+                    </c:if>
+                </li>
+                <li style="font-size: 25px; color: white">|</li>
+                <li><c:if test="${sessionScope['user']==null}">
+                    <a href="users?action=register">Sign up</a>
+                </c:if>
+                    <c:if test="${sessionScope['user']!=null}">
+                        <a href="users?action=profile">Profile</a>
+                    </c:if> </li>
+                <li>
+                    <c:if test="${sessionScope['user']==null}">
                     <a href="users?action=login"> <button class="button-login" >LOG IN</button></a>
+                    </c:if>
+                    ${user.avatar}
+                    <c:if test="${sessionScope['user']!=null}">
+                        <img src="${sessionScope['user'].avatar}">
+                    </c:if>
                 </li>
             </ul>
         </div>
@@ -386,7 +392,7 @@
     <div class="grid-row">
         <div class="topHit">
             <div class="listSong" cellpadding="5" cellspacing="5">
-                <h2>Top HIT</h2>
+                <h2>DE XUAT</h2>
                 <c:if test="${currentPage != 1}">
                     <a href="song?page=${currentPage - 1}">Previous</a>
                 </c:if>
@@ -413,211 +419,63 @@
                             <p>
                                     ${st.name}
                             </p>
-                            <p style="color: aliceblue">MONO, Onionn</p>
+                            <p> ${st.listen} </p>
                             <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
                             <div class="song-shawdow"></div>
                         </div>
                     </a>
                 </c:forEach>
             </div>
-
-        </div>
-        <div>
-            <div><h2>Your Play List</h2></div>
         </div>
         <div class="topHit">
-            <div><h2>Top HIT</h2></div>
-            <div class="music">
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
+            <div class="listSinger" cellpadding="5" cellspacing="5">
+                <h2>SINGER</h2>
+                <c:if test="${currentPageSG != 1}">
+                    <a href="singer?page1=${currentPageSG - 1}">Previous</a>
+                </c:if>
+                <c:forEach begin="1" end="${noOfPagesSG}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPageSG eq i}">
+                            <a>${i}</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="singer?page1=${i}">${i}</a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <c:if test="${currentPageSG lt noOfPagesSG}">
+                    <a href="singer?page1=${currentPageSG + 1}">Next</a>
+                </c:if></div>
+            <div class="music" cellpadding="5" cellspacing="5">
+                <c:forEach var="sg" items='${requestScope["singer"]}'>
+                    <a style="z-index: 1 " href="singer?action=detail&id=${sg.id}">
+                        <div class="song" style="width: 186px; height: 276px">
+                            <img class="img-song" src="${sg.img}">
+                            <p></p>
+                            <p>
+                                    ${sg.name}
+                            </p>
+                            <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
+                            <div class="song-shawdow"></div>
+                        </div>
+                    </a>
+                </c:forEach>
             </div>
         </div>
-        <div class="topHit">
-            <div><h2>Top HIT</h2></div>
-            <div class="music">
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-            </div>
-        </div>
-        <div class="topHit">
-            <div><h2>Top HIT</h2></div>
-            <div class="music">
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-                <div class="song" style="width: 186px; height: 276px">
-                    <img class="img-song" src="img/mono.jpg">
-                    <p></p>
-                    <p>
-                        Waiting For You
-                    </p>
-                    <a style="color: aliceblue">MONO, Onionn</a>
-
-                    <i class="bi bi-play-circle-fill" style="width: 50px;height: 50px"></i>
-                    <div class="song-shawdow"></div>
-                </div>
-            </div>
-        </div>
-        <div></div>
     </div>
 </div>
 </div>
+<c:if test="${sessionScope['user']==null}">
 <div class="notification">
     <div class="my-text">
         <p>PREVIEW OF SPOTIFY</p><br>
         <p>Sign up to get unlimited songs and podcasts with occasional ads. No credit card needed</p>
         <div class="button">
-            <button class="signup" href="#aabbb"> SIGN UP FREE</button>
+            <a href="users?action=register"><button class="signup" > SIGN UP FREE</button></a>
         </div>
     </div>
 </div>
-<h1 class="test">Test</h1>
+</c:if>
+<c:if test="${sessionScope['user']!=null}"><div></div></c:if>
 </body>
 </html>

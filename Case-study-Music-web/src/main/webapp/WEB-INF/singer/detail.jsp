@@ -22,11 +22,10 @@
     <label >NAME</label><br>
     <input value="${requestScope["singer"].getName()}" ><br>
     <label >BIRTHDAY</label><br>
-    <input value="${requestScope["singer"].getBirthday()}" ><br>
+    <input value="${requestScope["singer"].getBirthDay()}" ><br>
     <label >GENDER</label><br>
     <input value="${requestScope["singer"].getGender()}" ><br>
-
 </form>
-<a href="#">Back Menu</a>
+<a href="/">Back Menu</a>
 </body>
 </html>

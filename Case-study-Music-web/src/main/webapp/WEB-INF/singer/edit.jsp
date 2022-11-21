@@ -12,7 +12,7 @@
     <title>Title</title>
 </head>
 <body>
-<a href="#">Back Menu</a>
+<a href="/">Back Menu</a>
 <c:if test='${requestScope["message"]!=null}'>
     <span style="color: blue">${requestScope["message"]}</span>
 </c:if>
@@ -20,7 +20,7 @@
     <label >NAME</label><br>
     <input type="text" name="name" value="${requestScope["singer"].getName()}" ><br>
     <label >BIRTHDAY</label><br>
-    <input type="text" name="birthday" value="${requestScope["singer"].getBirthday()}" ><br>
+    <input type="text" name="birthDay" value="${requestScope["singer"].getBirthDay()}" ><br>
     <label >GENDER</label><br>
     <input type="text" name="gender" value="${requestScope["singer"].getGender()}" ><br>
     <button>Edit</button>

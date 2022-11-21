@@ -2,6 +2,7 @@ package rikkei.academy.model.account;
 
 import rikkei.academy.model.account.RoleName;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,8 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     private String avatar;
 
+    private Role role;
+
     public User() {
     }
 
@@ -26,6 +29,15 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.avatar = avatar;
+        this.role = new ArrayList<>(roles).get(0);
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public User(String name, String username, String email, String password, Set<Role> roles) {
@@ -34,22 +46,16 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.role = new ArrayList<>(roles).get(0);
+
     }
 
     public User(int id, String name, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.roles = roles;
-    }
+        this.role = new ArrayList<>(roles).get(0);
 
-    public User(int id, String name, String username, String email, String password, List<Role> roleList, String avatar) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roles = (Set<Role>) roleList;
-        this.avatar = avatar;
     }
 
 

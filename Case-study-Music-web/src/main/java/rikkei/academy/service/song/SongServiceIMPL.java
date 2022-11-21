@@ -24,6 +24,8 @@ public class SongServiceIMPL implements ISongService {
     private final String INSET_SONG_CATEGORY = "INSERT INTO songs_category VALUES (?, ?);";
     private final String INSET_SONG_SINGER = "INSERT INTO songs_singer VALUES (?,?);";
     private final String INSET_SONG_BAND = "INSERT INTO songs_singer VALUES (?,?);";
+    private final String UPDATE_LISTEN = "UPDATE songs SET listen = ? WHERE id=?;";
+
 
     @Override
     public void save(Song song) {
@@ -70,6 +72,7 @@ public class SongServiceIMPL implements ISongService {
                 preparedStatement.setString(1, song.getName());
                 preparedStatement.setInt(2, song.getListen());
                 preparedStatement.setString(3, song.getImg());
+                preparedStatement.setInt(4, song.getId());
                 preparedStatement.executeUpdate();
                 connection.commit();
             }
@@ -191,6 +194,19 @@ public class SongServiceIMPL implements ISongService {
             }
         }
         return list;
+    }
+
+    @Override
+    public void listen(Song song) {
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_LISTEN);
+            preparedStatement.setInt(1,song.getListen()+1);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public int getNoOfRecords() {

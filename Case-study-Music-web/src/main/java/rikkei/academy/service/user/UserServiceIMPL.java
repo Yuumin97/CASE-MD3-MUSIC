@@ -171,10 +171,11 @@ public class UserServiceIMPL implements IUserService {
                 String username = resultSet.getString("username");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                Set<Role> role = (Set<Role>) roleService.findById(id);
-                List<Role> roleList = new ArrayList<>(role);
+                Set<Role> role = new HashSet<>();
+                role.add(roleService.findById(id));
+//                List<Role> roleList = new ArrayList<>(role);
                 String avatar = resultSet.getString("avatar");
-                userList.add(new User(id,name,username,email,password,roleList,avatar));
+                userList.add(new User(id,name,username,email,password,role,avatar));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
